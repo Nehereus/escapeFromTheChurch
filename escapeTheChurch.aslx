@@ -1,22 +1,66 @@
+<!--Saved by Quest 5.8.6836.13983-->
 <asl version="580">
-
-  <include ref="English.aslx"/>
-  <include ref="Core.aslx"/>
-
+  <include ref="English.aslx" />
+  <include ref="Core.aslx" />
   <game name="escapeTheChurch">
     <gameid>b71b5964-07fe-488a-83e1-76da64dff263</gameid>
     <version>1.0</version>
     <firstpublished>2022</firstpublished>
   </game>
-
-  <object name="room">
+  <object name="basement">
     <inherit name="editor_room" />
     <isroom />
-
-    <object name="player">
+    <description>nothing. The room is so dark. </description>
+    <object name="Catherine">
       <inherit name="editor_object" />
       <inherit name="editor_player" />
+      <inherit name="female" />
+      <statusattributes type="stringdictionary">
+        <item>
+          <key>score</key>
+          <value>Score: !/10</value>
+        </item>
+      </statusattributes>
+      <score type="int">0</score>
+      <alias>you</alias>
+      <visible type="boolean">false</visible>
+      <gender>she</gender>
+      <article>she</article>
+      <possessive>her</possessive>
+      <scenery type="boolean">false</scenery>
+      <isroom />
+      <usedefaultprefix />
     </object>
+    <object name="television">
+      <inherit name="editor_object" />
+      <inherit name="switchable" />
+      <alias>tv</alias>
+      <visible type="boolean">false</visible>
+      <feature_switchable />
+    </object>
+    <object name="cabinet">
+      <inherit name="editor_object" />
+      <visible type="boolean">false</visible>
+    </object>
+    <object name="basement_northwest">
+      <inherit name="editor_room" />
+      <alias>northwest of the basement</alias>
+      <usedefaultprefix type="boolean">false</usedefaultprefix>
+      <prefix>the</prefix>
+      <suffix>the</suffix>
+      <object name="Lamp">
+        <inherit name="editor_object" />
+        <visible />
+        <scenery type="boolean">false</scenery>
+        <usedefaultprefix type="boolean">false</usedefaultprefix>
+      </object>
+      <exit alias="southeast" to="basement">
+        <inherit name="southeastdirection" />
+      </exit>
+    </object>
+    <exit alias="northwest" to="basement_northwest">
+      <inherit name="northwestdirection" />
+      <visible />
+    </exit>
   </object>
-
 </asl>
