@@ -17,11 +17,25 @@
       <usedefaultprefix type="boolean">false</usedefaultprefix>
       <prefix>the</prefix>
       <suffix type="string"></suffix>
-      <object name="Lamp">
+      <object name="lamp">
         <inherit name="editor_object" />
+        <inherit name="switchable" />
         <visible />
         <scenery type="boolean">false</scenery>
         <usedefaultprefix type="boolean">false</usedefaultprefix>
+        <look>you can find the lamp hasn't been used for a long time since it is coverd by dust</look>
+        <alias>lamp</alias>
+        <feature_switchable />
+        <switchonmsg>the room is much brighter now</switchonmsg>
+        <switchoffmsg>once again, you can see nothing but darkness</switchoffmsg>
+        <onswitchon type="script">
+          if (HasAttribute(electric cabinet, "is_fixed")) {
+            SetObjectFlagOn (lamp, "is_turned_on")
+          }
+          else {
+            msg ("no power")
+          }
+        </onswitchon>
       </object>
       <exit alias="southeast" to="basement_center">
         <inherit name="southeastdirection" />
@@ -111,9 +125,25 @@
       <prefix>the</prefix>
       <suffix type="string"></suffix>
       <alias>southwest of the basement</alias>
-      <object name="cabinet">
+      <object name="electric cabinet">
         <inherit name="editor_object" />
-        <visible type="boolean">false</visible>
+        <visible />
+        <alias>electric cabinet</alias>
+        <look type="script"><![CDATA[
+          OutputTextNoBr ("The cabinet seems controls the power of the whole room,")
+          if (HasAttribute(this, "is_fixed")) {
+            msg ("and it works like a charm now. <br/>")
+          }
+          else {
+            msg ("but one of the cirtuits has been broken.")
+          }
+        ]]></look>
+        <fix type="scriptdictionary">
+          <item key="plier">
+            OutputTextNoBr ("After some works, the old cabinet works again")
+            SetObjectFlagOn (electric cabinet, "is_fixed")
+          </item>
+        </fix>
       </object>
       <exit alias="northeast" to="basement_center">
         <inherit name="northeastdirection" />
@@ -233,4 +263,9 @@
       </object>
     </object>
   </object>
+  <verb>
+    <property>fix</property>
+    <pattern>fix</pattern>
+    <defaultexpression>"You can't fix " + object.article + "."</defaultexpression>
+  </verb>
 </asl>
