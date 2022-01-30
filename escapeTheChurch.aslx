@@ -16,7 +16,7 @@
       <alias>northwest of the basement</alias>
       <usedefaultprefix type="boolean">false</usedefaultprefix>
       <prefix>the</prefix>
-      <suffix>the</suffix>
+      <suffix type="string"></suffix>
       <object name="Lamp">
         <inherit name="editor_object" />
         <visible />
@@ -26,7 +26,7 @@
       <exit alias="southeast" to="basement_center">
         <inherit name="southeastdirection" />
       </exit>
-      <exit alias="south" to="basement_south">
+      <exit alias="south" to="basement_west">
         <inherit name="southdirection" />
       </exit>
     </object>
@@ -36,7 +36,7 @@
       <isroom />
       <usedefaultprefix type="boolean">false</usedefaultprefix>
       <prefix>the</prefix>
-      <suffix>the</suffix>
+      <suffix type="string"></suffix>
       <object name="player">
         <inherit name="editor_object" />
         <inherit name="editor_player" />
@@ -72,16 +72,13 @@
       <isroom />
       <usedefaultprefix type="boolean">false</usedefaultprefix>
       <prefix>the</prefix>
-      <suffix>the</suffix>
+      <suffix type="string"></suffix>
       <alias>south of the basement</alias>
       <exit alias="north" to="basement_center">
         <inherit name="northdirection" />
       </exit>
       <exit alias="west" to="basement_southwest">
         <inherit name="westdirection" />
-      </exit>
-      <exit alias="southwest" to="basement_southwest">
-        <inherit name="southwestdirection" />
       </exit>
       <exit alias="northwest" to="basement_west">
         <inherit name="northwestdirection" />
@@ -91,7 +88,7 @@
       <inherit name="editor_room" />
       <usedefaultprefix type="boolean">false</usedefaultprefix>
       <prefix>the</prefix>
-      <suffix>the</suffix>
+      <suffix type="string"></suffix>
       <alias>southwest of the basement</alias>
       <object name="cabinet">
         <inherit name="editor_object" />
@@ -109,9 +106,9 @@
     </object>
     <object name="basement_west">
       <inherit name="editor_room" />
-      <usedefaultprefix />
+      <usedefaultprefix type="boolean">false</usedefaultprefix>
       <prefix>the</prefix>
-      <suffix>the</suffix>
+      <suffix type="string"></suffix>
       <alias>west of the basement</alias>
       <object name="television">
         <inherit name="editor_object" />
@@ -128,6 +125,9 @@
       </exit>
       <exit alias="south" to="basement_southwest">
         <inherit name="southdirection" />
+      </exit>
+      <exit alias="north" to="basement_northwest">
+        <inherit name="northdirection" />
       </exit>
     </object>
   </object>
