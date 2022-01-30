@@ -11,37 +11,6 @@
     <inherit name="editor_room" />
     <isroom />
     <description>nothing. The room is so dark. </description>
-    <object name="Catherine">
-      <inherit name="editor_object" />
-      <inherit name="editor_player" />
-      <inherit name="female" />
-      <statusattributes type="stringdictionary">
-        <item>
-          <key>score</key>
-          <value>Score: !/10</value>
-        </item>
-      </statusattributes>
-      <score type="int">0</score>
-      <alias>you</alias>
-      <visible type="boolean">false</visible>
-      <gender>she</gender>
-      <article>she</article>
-      <possessive>her</possessive>
-      <scenery type="boolean">false</scenery>
-      <isroom />
-      <usedefaultprefix />
-    </object>
-    <object name="television">
-      <inherit name="editor_object" />
-      <inherit name="switchable" />
-      <alias>tv</alias>
-      <visible type="boolean">false</visible>
-      <feature_switchable />
-    </object>
-    <object name="cabinet">
-      <inherit name="editor_object" />
-      <visible type="boolean">false</visible>
-    </object>
     <object name="basement_northwest">
       <inherit name="editor_room" />
       <alias>northwest of the basement</alias>
@@ -54,13 +23,112 @@
         <scenery type="boolean">false</scenery>
         <usedefaultprefix type="boolean">false</usedefaultprefix>
       </object>
-      <exit alias="southeast" to="basement">
+      <exit alias="southeast" to="basement_center">
         <inherit name="southeastdirection" />
       </exit>
+      <exit alias="south" to="basement_south">
+        <inherit name="southdirection" />
+      </exit>
     </object>
-    <exit alias="northwest" to="basement_northwest">
-      <inherit name="northwestdirection" />
-      <visible />
-    </exit>
+    <object name="basement_center">
+      <inherit name="editor_room" />
+      <alias>center of the basement</alias>
+      <isroom />
+      <usedefaultprefix type="boolean">false</usedefaultprefix>
+      <prefix>the</prefix>
+      <suffix>the</suffix>
+      <object name="player">
+        <inherit name="editor_object" />
+        <inherit name="editor_player" />
+        <inherit name="female" />
+        <statusattributes type="stringdictionary">
+          <item>
+            <key>score</key>
+            <value>Score: !/10</value>
+          </item>
+        </statusattributes>
+        <score type="int">0</score>
+        <alias>you</alias>
+        <visible />
+        <gender>she</gender>
+        <article>she</article>
+        <possessive>her</possessive>
+        <scenery type="boolean">false</scenery>
+        <isroom type="boolean">false</isroom>
+        <usedefaultprefix />
+      </object>
+      <exit alias="northwest" to="basement_northwest">
+        <inherit name="northwestdirection" />
+      </exit>
+      <exit alias="west" to="basement_west">
+        <inherit name="westdirection" />
+      </exit>
+      <exit alias="southwest" to="basement_southwest">
+        <inherit name="southwestdirection" />
+      </exit>
+    </object>
+    <object name="basement_south">
+      <inherit name="editor_room" />
+      <isroom />
+      <usedefaultprefix type="boolean">false</usedefaultprefix>
+      <prefix>the</prefix>
+      <suffix>the</suffix>
+      <alias>south of the basement</alias>
+      <exit alias="north" to="basement_center">
+        <inherit name="northdirection" />
+      </exit>
+      <exit alias="west" to="basement_southwest">
+        <inherit name="westdirection" />
+      </exit>
+      <exit alias="southwest" to="basement_southwest">
+        <inherit name="southwestdirection" />
+      </exit>
+      <exit alias="northwest" to="basement_west">
+        <inherit name="northwestdirection" />
+      </exit>
+    </object>
+    <object name="basement_southwest">
+      <inherit name="editor_room" />
+      <usedefaultprefix type="boolean">false</usedefaultprefix>
+      <prefix>the</prefix>
+      <suffix>the</suffix>
+      <alias>southwest of the basement</alias>
+      <object name="cabinet">
+        <inherit name="editor_object" />
+        <visible type="boolean">false</visible>
+      </object>
+      <exit alias="northeast" to="basement_center">
+        <inherit name="northeastdirection" />
+      </exit>
+      <exit alias="east" to="basement_south">
+        <inherit name="eastdirection" />
+      </exit>
+      <exit alias="north" to="basement_west">
+        <inherit name="northdirection" />
+      </exit>
+    </object>
+    <object name="basement_west">
+      <inherit name="editor_room" />
+      <usedefaultprefix />
+      <prefix>the</prefix>
+      <suffix>the</suffix>
+      <alias>west of the basement</alias>
+      <object name="television">
+        <inherit name="editor_object" />
+        <inherit name="switchable" />
+        <alias>tv</alias>
+        <visible />
+        <feature_switchable />
+      </object>
+      <exit alias="east" to="basement_center">
+        <inherit name="eastdirection" />
+      </exit>
+      <exit alias="southeast" to="basement_south">
+        <inherit name="southeastdirection" />
+      </exit>
+      <exit alias="south" to="basement_southwest">
+        <inherit name="southdirection" />
+      </exit>
+    </object>
   </object>
 </asl>
