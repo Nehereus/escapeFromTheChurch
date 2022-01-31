@@ -328,11 +328,6 @@
           <prefix>some</prefix>
           <take type="boolean">false</take>
         </object>
-        <object name="plier">
-          <inherit name="editor_object" />
-          <scenery type="boolean">false</scenery>
-          <take />
-        </object>
       </object>
     </object>
   </object>
