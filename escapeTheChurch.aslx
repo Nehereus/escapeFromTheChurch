@@ -28,10 +28,10 @@
         <feature_switchable />
         <switchoffmsg>once again, you can see nothing but darkness</switchoffmsg>
         <cannotswitchon>no power</cannotswitchon>
+        <switchonmsg>the room is much brighter now</switchonmsg>
         <onswitchon type="script">
           msg ("{lamp.switchedon}")
         </onswitchon>
-        <switchonmsg>the room is much brighter now</switchonmsg>
       </object>
       <exit alias="southeast" to="basement_center">
         <inherit name="southeastdirection" />
@@ -208,7 +208,8 @@
         <inherit name="plural" />
         <look type="script"><![CDATA[
           if (IsSwitchedOn(lamp)) {
-            msg ("\"Still remember 290 material? <br/>Time to Review!\"")
+            PrintCentered ("Still remember 290 materials? <br/>Time to Review!")
+            msg ("A message. Looks like Dr. Wienerberg's handwiring.")
           }
           else {
             msg ("The light is too dim, you cannot quite see what is written.")
@@ -221,6 +222,7 @@
       <usedefaultprefix type="boolean">false</usedefaultprefix>
       <prefix>the</prefix>
       <alias>east of the basement</alias>
+      <description type="string"></description>
       <exit alias="west" to="basement_center">
         <inherit name="westdirection" />
       </exit>
@@ -232,6 +234,24 @@
       </exit>
       <object name="desk">
         <inherit name="editor_object" />
+        <inherit name="surface" />
+        <feature_container />
+        <hidechildren type="boolean">false</hidechildren>
+        <listchildren />
+        <listchildrenprefix>On the desk there lies</listchildrenprefix>
+        <object name="letter">
+          <inherit name="editor_object" />
+          <take />
+          <attr name="feature_usegive" type="boolean">false</attr>
+          <look type="script">
+            if (IsSwitchedOn(lamp)) {
+              msg ("\"The content of the letter.\"")
+            }
+            else {
+              msg ("\"The light is too dim for you to distinguish words.\"")
+            }
+          </look>
+        </object>
       </object>
       <exit alias="south" to="basement_southeast">
         <inherit name="southdirection" />
@@ -264,17 +284,23 @@
         <listchildren />
         <isopen />
         <listchildrenprefix>You found</listchildrenprefix>
-        <object name="plier">
-          <inherit name="editor_object" />
-          <scenery type="boolean">false</scenery>
-          <take />
-        </object>
+        <look type="script">
+          if (not IsSwitchedOn(lamp)) {
+            msg ("The light is dim, but you managed to identify something on the bookshelf.")
+          }
+        </look>
+        <contentsprefix>on which there are</contentsprefix>
         <object name="books">
           <inherit name="editor_object" />
           <inherit name="plural" />
           <usedefaultprefix type="boolean">false</usedefaultprefix>
           <prefix>some</prefix>
           <take type="boolean">false</take>
+        </object>
+        <object name="plier">
+          <inherit name="editor_object" />
+          <scenery type="boolean">false</scenery>
+          <take />
         </object>
       </object>
     </object>
