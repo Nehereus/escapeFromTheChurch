@@ -91,6 +91,9 @@
       <exit alias="south" to="basement_south">
         <inherit name="southdirection" />
       </exit>
+      <exit alias="northeast" to="basement_northeast">
+        <inherit name="northeastdirection" />
+      </exit>
     </object>
     <object name="basement_south">
       <inherit name="editor_room" />
@@ -194,18 +197,30 @@
       <exit alias="west" to="basement_northwest">
         <inherit name="westdirection" />
       </exit>
-      <object name="bed">
-        <inherit name="editor_object" />
-        <lie>This is not a good time to rest.</lie>
-      </object>
       <exit alias="southeast" to="basement_east">
         <inherit name="southeastdirection" />
       </exit>
+      <exit alias="east" to="basement_northeast">
+        <inherit name="eastdirection" />
+      </exit>
+      <object name="writings on the wall">
+        <inherit name="editor_object" />
+        <inherit name="plural" />
+        <look type="script"><![CDATA[
+          if (IsSwitchedOn(lamp)) {
+            msg ("\"Still remember 290 material? <br/>Time to Review!\"")
+          }
+          else {
+            msg ("The light is too dim, you cannot quite see what is written.")
+          }
+        ]]></look>
+      </object>
     </object>
     <object name="basement_east">
       <inherit name="editor_room" />
       <usedefaultprefix type="boolean">false</usedefaultprefix>
       <prefix>the</prefix>
+      <alias>east of the basement</alias>
       <exit alias="west" to="basement_center">
         <inherit name="westdirection" />
       </exit>
@@ -221,11 +236,15 @@
       <exit alias="south" to="basement_southeast">
         <inherit name="southdirection" />
       </exit>
+      <exit alias="north" to="basement_northeast">
+        <inherit name="northdirection" />
+      </exit>
     </object>
     <object name="basement_southeast">
       <inherit name="editor_room" />
       <usedefaultprefix type="boolean">false</usedefaultprefix>
       <prefix>the</prefix>
+      <alias>southeast of the basement</alias>
       <exit alias="north" to="basement_east">
         <inherit name="northdirection" />
       </exit>
@@ -255,6 +274,7 @@
           <inherit name="plural" />
           <usedefaultprefix type="boolean">false</usedefaultprefix>
           <prefix>some</prefix>
+          <take type="boolean">false</take>
         </object>
       </object>
     </object>
@@ -264,4 +284,21 @@
     <pattern>fix</pattern>
     <defaultexpression>"You can't fix " + object.article + "."</defaultexpression>
   </verb>
+  <object name="basement_northeast">
+    <inherit name="editor_room" />
+    <alias>northeast of the basement</alias>
+    <exit alias="west" to="basement_north">
+      <inherit name="westdirection" />
+    </exit>
+    <exit alias="south" to="basement_east">
+      <inherit name="southdirection" />
+    </exit>
+    <exit alias="southwest" to="basement_center">
+      <inherit name="southwestdirection" />
+    </exit>
+    <object name="bed">
+      <inherit name="editor_object" />
+      <lie>This is not a good time to rest.</lie>
+    </object>
+  </object>
 </asl>
