@@ -90,6 +90,9 @@
       <exit alias="south" to="basement_south">
         <inherit name="southdirection" />
       </exit>
+      <exit alias="northeast" to="basement_northeast">
+        <inherit name="northeastdirection" />
+      </exit>
     </object>
     <object name="basement_south">
       <inherit name="editor_room" />
@@ -205,18 +208,32 @@
       <exit alias="west" to="basement_northwest">
         <inherit name="westdirection" />
       </exit>
-      <object name="bed">
-        <inherit name="editor_object" />
-        <lie>This is not a good time to rest.</lie>
-      </object>
       <exit alias="southeast" to="basement_east">
         <inherit name="southeastdirection" />
       </exit>
+      <exit alias="east" to="basement_northeast">
+        <inherit name="eastdirection" />
+      </exit>
+      <object name="writings on the wall">
+        <inherit name="editor_object" />
+        <inherit name="plural" />
+        <look type="script"><![CDATA[
+          if (IsSwitchedOn(lamp)) {
+            PrintCentered ("Still remember 290 materials? <br/>Time to Review!")
+            msg ("A message. Looks like Dr. Wienerberg's handwiring.")
+          }
+          else {
+            msg ("The light is too dim, you cannot quite see what is written.")
+          }
+        ]]></look>
+      </object>
     </object>
     <object name="basement_east">
       <inherit name="editor_room" />
       <usedefaultprefix type="boolean">false</usedefaultprefix>
       <prefix>the</prefix>
+      <alias>east of the basement</alias>
+      <description type="string"></description>
       <exit alias="west" to="basement_center">
         <inherit name="westdirection" />
       </exit>
@@ -228,15 +245,37 @@
       </exit>
       <object name="desk">
         <inherit name="editor_object" />
+        <inherit name="surface" />
+        <feature_container />
+        <hidechildren type="boolean">false</hidechildren>
+        <listchildren />
+        <listchildrenprefix>On the desk there lies</listchildrenprefix>
+        <object name="letter">
+          <inherit name="editor_object" />
+          <take />
+          <attr name="feature_usegive" type="boolean">false</attr>
+          <look type="script">
+            if (IsSwitchedOn(lamp)) {
+              msg ("\"The content of the letter.\"")
+            }
+            else {
+              msg ("\"The light is too dim for you to distinguish words.\"")
+            }
+          </look>
+        </object>
       </object>
       <exit alias="south" to="basement_southeast">
         <inherit name="southdirection" />
+      </exit>
+      <exit alias="north" to="basement_northeast">
+        <inherit name="northdirection" />
       </exit>
     </object>
     <object name="basement_southeast">
       <inherit name="editor_room" />
       <usedefaultprefix type="boolean">false</usedefaultprefix>
       <prefix>the</prefix>
+      <alias>southeast of the basement</alias>
       <exit alias="north" to="basement_east">
         <inherit name="northdirection" />
       </exit>
@@ -256,6 +295,12 @@
         <listchildren />
         <isopen />
         <listchildrenprefix>You found</listchildrenprefix>
+        <look type="script">
+          if (not IsSwitchedOn(lamp)) {
+            msg ("The light is dim, but you managed to identify something on the bookshelf.")
+          }
+        </look>
+        <contentsprefix>on which there are</contentsprefix>
         <object name="plier">
           <inherit name="editor_object" />
           <scenery type="boolean">false</scenery>
@@ -281,6 +326,12 @@
           <inherit name="plural" />
           <usedefaultprefix type="boolean">false</usedefaultprefix>
           <prefix>some</prefix>
+          <take type="boolean">false</take>
+        </object>
+        <object name="plier">
+          <inherit name="editor_object" />
+          <scenery type="boolean">false</scenery>
+          <take />
         </object>
       </object>
     </object>
@@ -290,4 +341,21 @@
     <pattern>fix</pattern>
     <defaultexpression>"You can't fix " + object.article + "."</defaultexpression>
   </verb>
+  <object name="basement_northeast">
+    <inherit name="editor_room" />
+    <alias>northeast of the basement</alias>
+    <exit alias="west" to="basement_north">
+      <inherit name="westdirection" />
+    </exit>
+    <exit alias="south" to="basement_east">
+      <inherit name="southdirection" />
+    </exit>
+    <exit alias="southwest" to="basement_center">
+      <inherit name="southwestdirection" />
+    </exit>
+    <object name="bed">
+      <inherit name="editor_object" />
+      <lie>This is not a good time to rest.</lie>
+    </object>
+  </object>
 </asl>
