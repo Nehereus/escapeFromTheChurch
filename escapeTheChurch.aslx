@@ -170,6 +170,7 @@
         <listchildren />
         <listchildrenprefix>it attachs </listchildrenprefix>
         <look>This is a plasma tv, but the screen of the TV has been cracked. Some power cable attached on the back of the tv.</look>
+        <contentsprefix>on the ground there lies</contentsprefix>
         <object name="tv power cable">
           <inherit name="editor_object" />
           <alias>power cable</alias>
@@ -295,12 +296,19 @@
         <listchildren />
         <isopen />
         <listchildrenprefix>You found</listchildrenprefix>
+        <contentsprefix>on which there are</contentsprefix>
         <look type="script">
           if (not IsSwitchedOn(lamp)) {
             msg ("The light is dim, but you managed to identify something on the bookshelf.")
           }
         </look>
-        <contentsprefix>on which there are</contentsprefix>
+        <object name="books">
+          <inherit name="editor_object" />
+          <inherit name="plural" />
+          <usedefaultprefix type="boolean">false</usedefaultprefix>
+          <prefix>some</prefix>
+          <take type="boolean">false</take>
+        </object>
         <object name="plier">
           <inherit name="editor_object" />
           <scenery type="boolean">false</scenery>
@@ -320,13 +328,6 @@
               }
             </item>
           </selfuseon>
-        </object>
-        <object name="books">
-          <inherit name="editor_object" />
-          <inherit name="plural" />
-          <usedefaultprefix type="boolean">false</usedefaultprefix>
-          <prefix>some</prefix>
-          <take type="boolean">false</take>
         </object>
       </object>
     </object>
