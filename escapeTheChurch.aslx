@@ -26,16 +26,12 @@
         <look>you can find the lamp hasn't been used for a long time since it is coverd by dust</look>
         <alias>lamp</alias>
         <feature_switchable />
-        <switchonmsg>the room is much brighter now</switchonmsg>
         <switchoffmsg>once again, you can see nothing but darkness</switchoffmsg>
+        <cannotswitchon>no power</cannotswitchon>
         <onswitchon type="script">
-          if (HasAttribute(electric cabinet, "is_fixed")) {
-            SetObjectFlagOn (lamp, "is_turned_on")
-          }
-          else {
-            msg ("no power")
-          }
+          msg ("{lamp.switchedon}")
         </onswitchon>
+        <switchonmsg>the room is much brighter now</switchonmsg>
       </object>
       <exit alias="southeast" to="basement_center">
         <inherit name="southeastdirection" />
@@ -141,7 +137,7 @@
         <fix type="scriptdictionary">
           <item key="plier">
             OutputTextNoBr ("After some works, the old cabinet works again")
-            SetObjectFlagOn (electric cabinet, "is_fixed")
+            set (lamp, "cannotswitchon", null)
           </item>
         </fix>
       </object>
