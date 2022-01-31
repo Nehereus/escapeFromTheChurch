@@ -30,7 +30,6 @@
         <cannotswitchon>no power</cannotswitchon>
         <switchonmsg>the room is much brighter now</switchonmsg>
         <onswitchon type="script">
-          msg ("{lamp.switchedon}")
         </onswitchon>
       </object>
       <exit alias="southeast" to="basement_center">
@@ -138,8 +137,8 @@
           }
         ]]></look>
         <fix type="scriptdictionary">
-          <item key="plier">
-            OutputTextNoBr ("After some works, the old cabinet works again")
+          <item key="tv power cable">
+            OutputTextNoBr ("You reconnect the circuit with the tv power cable. The old cabinet finally works again")
             set (lamp, "cannotswitchon", null)
           </item>
         </fix>
@@ -162,10 +161,22 @@
       <alias>west of the basement</alias>
       <object name="television">
         <inherit name="editor_object" />
-        <inherit name="switchable" />
+        <inherit name="surface" />
         <alias>tv</alias>
         <visible />
         <feature_switchable />
+        <feature_container />
+        <hidechildren />
+        <listchildren />
+        <listchildrenprefix>it attachs </listchildrenprefix>
+        <look>This is a plasma tv, but the screen of the TV has been cracked. Some power cable attached on the back of the tv.</look>
+        <object name="tv power cable">
+          <inherit name="editor_object" />
+          <alias>power cable</alias>
+          <scenery />
+          <feature_usegive />
+          <take />
+        </object>
       </object>
       <exit alias="east" to="basement_center">
         <inherit name="eastdirection" />
@@ -290,6 +301,26 @@
           }
         </look>
         <contentsprefix>on which there are</contentsprefix>
+        <object name="plier">
+          <inherit name="editor_object" />
+          <scenery type="boolean">false</scenery>
+          <take />
+          <feature_usegive />
+          <selfuseanything type="script">
+            msg ("there it nothing to cut")
+          </selfuseanything>
+          <selfuseon type="scriptdictionary">
+            <item key="tv power cable">
+              if (ListContains(ScopeReachable(), tv power cable)) {
+                msg ("you cut off part of the cable, and it dropped down on the ground")
+                set (tv power cable, "scenery", false)
+              }
+              else {
+                msg ("there it nothing to cut.")
+              }
+            </item>
+          </selfuseon>
+        </object>
         <object name="books">
           <inherit name="editor_object" />
           <inherit name="plural" />
