@@ -40,8 +40,10 @@
         <switchonmsg>You click the lamp on, and light fills the room. Much better.</switchonmsg>
         <takemsg>This lamp is as tall as you are. You don't want to upset it by getting handsy.</takemsg>
         <onswitchon type="script">
+          MakeExitVisible (basement_door)
         </onswitchon>
         <onswitchoff type="script">
+          MakeExitInvisible (basement_door)
         </onswitchoff>
       </object>
       <object name="television">
@@ -66,12 +68,13 @@
       </object>
       <object name="wire">
         <inherit name="editor_object" />
-        <look>There is some exposed wire sticking out the back of the TV here.</look>
+        <look>There is some exposed wire sticking out the back of the TV.</look>
         <scenery />
         <attr name="feature_usegive" type="boolean">false</attr>
         <take type="boolean">false</take>
         <not_all />
         <takemsg>You try to pull the wire out of the TV, but it doesn't give.</takemsg>
+        <visible />
         <ontake type="script">
         </ontake>
       </object>
@@ -87,10 +90,10 @@
       <usedefaultprefix type="boolean">false</usedefaultprefix>
       <prefix>the</prefix>
       <suffix type="string"></suffix>
-      <exitslistprefix>You can move</exitslistprefix>
+      <exitslistprefix>You can go</exitslistprefix>
       <description type="script">
         if (IsSwitchedOn(lamp)) {
-          msg ("Soft lamp light fills the room.")
+          msg ("Soft lamp light fills the room. To the northeast are the bed and writing on the wall. To the southeast are the bookshelf and desk. To the southwest is the circuit box. To the northwest are the lamp and TV. Additionally, you can now see the door out.")
         }
         else {
           msg ("The room is too dark to make out much of your surroundings.")
@@ -117,17 +120,34 @@
         <usedefaultprefix />
         <takemsg>For better or worse, you always have yourself.</takemsg>
       </object>
-      <exit alias="northwest" to="basement_northwest">
-        <inherit name="northwestdirection" />
-      </exit>
-      <exit alias="southwest" to="basement_southwest">
-        <inherit name="southwestdirection" />
+      <exit alias="northeast" to="basement_northeast">
+        <inherit name="northeastdirection" />
       </exit>
       <exit alias="southeast" to="basement_southeast">
         <inherit name="southeastdirection" />
       </exit>
-      <exit alias="northeast" to="basement_northeast">
-        <inherit name="northeastdirection" />
+      <exit alias="southwest" to="basement_southwest">
+        <inherit name="southwestdirection" />
+      </exit>
+      <exit alias="northwest" to="basement_northwest">
+        <inherit name="northwestdirection" />
+      </exit>
+      <exit name="basement_door" alias="up" to="chapel">
+        <inherit name="updirection" />
+        <scenery type="boolean">false</scenery>
+        <locked />
+        <visible type="boolean">false</visible>
+        <lockmessage>You go to exit, but the door is locked. It appears to require some kind of code.</lockmessage>
+        <runscript />
+        <script type="script">
+          firsttime {
+            msg ("You punch in the code to the door, and it swings open.")
+            MoveObject (player, chapel)
+          }
+          otherwise {
+            MoveObject (player, chapel)
+          }
+        </script>
       </exit>
     </object>
     <object name="basement_southwest">
@@ -158,6 +178,15 @@
             set (lamp, "cannotswitchon", null)
             RemoveObject (wire)
           </item>
+          <item key="books">
+            msg ("You don't need a book to tell you how to fix this. You need something to actually fix it with.")
+          </item>
+          <item key="letter">
+            msg ("Amazingly, this random piece of paper is not helping at all with this broken circuitry.")
+          </item>
+          <item key="player">
+            msg ("General advice: don't stick your fingers into live circuits.")
+          </item>
         </fix>
       </object>
       <exit alias="back to the center" to="basement_center">
@@ -169,9 +198,6 @@
       <usedefaultprefix type="boolean">false</usedefaultprefix>
       <prefix>the</prefix>
       <alias>southeast corner of the basement</alias>
-      <exit alias="back to the center" to="basement_center">
-        <inherit name="northwestdirection" />
-      </exit>
       <object name="bookshelf">
         <inherit name="editor_object" />
         <inherit name="surface" />
@@ -197,7 +223,20 @@
           <inherit name="plural" />
           <usedefaultprefix type="boolean">false</usedefaultprefix>
           <prefix>some</prefix>
-          <take type="boolean">false</take>
+          <take />
+          <look>A handful of textbooks are lined up on the shelf.</look>
+          <feature_usegive />
+          <selfuseon type="scriptdictionary">
+            <item key="letter">
+              if (IsSwitchedOn(lamp)) {
+                msg ("You finally get around to studying. Nothing like a kidnapping for motivation. Referencing the textbooks, you're able to solve the problem on the letter, and you're pretty sure you know the code to unlock the door.")
+                UnlockExit (basement_door)
+              }
+              else {
+                msg ("There's not nearly enough light to make any meaningful progress here.")
+              }
+            </item>
+          </selfuseon>
         </object>
         <object name="pliers">
           <inherit name="editor_object" />
@@ -254,16 +293,19 @@
           <inherit name="editor_object" />
           <take />
           <attr name="feature_usegive" type="boolean">false</attr>
-          <look type="script">
+          <look type="script"><![CDATA[
             if (IsSwitchedOn(lamp)) {
-              msg ("\"The content of the letter.\"")
+              msg ("\"Catherine,<br/><br/>Your performance in my class was abysmal. You and your partner completely neglected to work together on the final project. Now both of you are stuck in here until you can learn some cooperation.<br/><br/>Severely Disappointed,<br/>Professor Von Wienerberg\"<br/><br/>There's a complicated-looking homework problem on the back.<br/><br/>Well. Turns out your teacher's insane. No time to worry about that now, though. Right now, you need to focus on getting out of here, and apparently rescuing your project partner...what was her name again?")
             }
             else {
-              msg ("The light is too dim for you to distinguish words.")
+              msg ("The light is too dim for you to make out what the letter says.")
             }
-          </look>
+          ]]></look>
         </object>
       </object>
+      <exit alias="back to the center" to="basement_center">
+        <inherit name="northwestdirection" />
+      </exit>
     </object>
     <object name="basement_northeast">
       <inherit name="editor_room" />
@@ -307,4 +349,50 @@
     <pattern>cut</pattern>
     <defaultexpression>"You can't cut " + object.article + "."</defaultexpression>
   </verb>
+  <object name="chapel">
+    <inherit name="editor_room" />
+    <description>The ceiling stretches high overhead. Rows of benches line the floor, leading up to a communion table and lectern. Large windows loom over the north end of the room, and the front door sits at the south end. To the side, there is a smaller door for the storage room.</description>
+    <usedefaultprefix type="boolean">false</usedefaultprefix>
+    <prefix>the</prefix>
+    <object name="benches">
+      <inherit name="editor_object" />
+      <inherit name="plural" />
+      <look>Uncomfortable wooden benches, perfect for preventing children from sitting still during service.</look>
+      <usedefaultprefix type="boolean">false</usedefaultprefix>
+      <scenery />
+    </object>
+    <object name="lectern">
+      <inherit name="editor_object" />
+      <look>The pulpit radiates authority, even with the church in this dark, empty state.</look>
+      <scenery />
+    </object>
+    <object name="communion table">
+      <inherit name="editor_object" />
+      <scenery />
+    </object>
+    <object name="window">
+      <inherit name="editor_object" />
+      <scenery />
+    </object>
+    <object name="front door">
+      <inherit name="editor_object" />
+      <scenery />
+    </object>
+    <object name="storage door">
+      <inherit name="editor_object" />
+      <scenery />
+    </object>
+    <object name="ceiling">
+      <inherit name="editor_object" />
+      <scenery />
+      <look>You look up for a moment, but quickly look back down before you get dizzy.</look>
+    </object>
+    <object name="Sharon">
+      <inherit name="editor_object" />
+      <inherit name="namedfemale" />
+    </object>
+    <exit alias="down" to="basement_center">
+      <inherit name="downdirection" />
+    </exit>
+  </object>
 </asl>
