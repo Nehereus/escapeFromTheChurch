@@ -2,19 +2,39 @@
 <asl version="580">
   <include ref="English.aslx" />
   <include ref="Core.aslx" />
-  <game name="escapeTheChurch">
+  <game name="Escape the Church">
     <gameid>b71b5964-07fe-488a-83e1-76da64dff263</gameid>
     <version>1.0</version>
     <firstpublished>2022</firstpublished>
     <defaultforeground>Black</defaultforeground>
-    <defaultbackground>White</defaultbackground>
-    <marginscolour type="string"></marginscolour>
+    <defaultbackground>PowderBlue</defaultbackground>
+    <marginscolour>GhostWhite</marginscolour>
     <setbackgroundopacity type="boolean">false</setbackgroundopacity>
-    <start type="script">
-      msg ("You wake up in a dark room, with only dim light coming from your dying phone. It looks like you're in a basement. You feel the urge to get out of here as soon as possible.")
+    <start type="script"><![CDATA[
+      msg ("Welcome to Escape the Church! If you get stuck, type HELP for some guidance. Also, keep in mind that not everything in this game is necessarily accessible by hyperlink. The text input isn't entirely decorative, you know.<br/><br/>Have fun!<br/>")
       wait {
+        msg ("You wake up in a dark room, with only dim light coming from your dying phone. It looks like you're in a basement. You feel the urge to get out of here as soon as possible.<br/>")
+        wait {
+        }
       }
-    </start>
+    ]]></start>
+    <showscore type="boolean">false</showscore>
+    <colourblend type="boolean">false</colourblend>
+    <defaultfont>Georgia, serif</defaultfont>
+    <panestheme>Tranquil</panestheme>
+    <showborder />
+    <bordercolour type="string"></bordercolour>
+    <turnoffcompass type="boolean">false</turnoffcompass>
+    <showpanes />
+    <menubackground>PowderBlue</menubackground>
+    <menuhoverbackground>LightSteelBlue</menuhoverbackground>
+    <shadowbox type="boolean">false</shadowbox>
+    <showlocation />
+    <classiclocation />
+    <customlocationcolour>DeepSkyBlue</customlocationcolour>
+    <customlocationtextcolour>Navy</customlocationtextcolour>
+    <statusandcompassattop type="boolean">false</statusandcompassattop>
+    <borderlesscursor />
   </game>
   <object name="basement">
     <inherit name="editor_room" />
@@ -45,6 +65,7 @@
         <onswitchoff type="script">
           MakeExitInvisible (basement_door)
         </onswitchoff>
+        <not_all />
       </object>
       <object name="television">
         <inherit name="editor_object" />
@@ -57,24 +78,30 @@
         <hidechildren />
         <listchildren />
         <listchildrenprefix>it attachs </listchildrenprefix>
-        <look>A nice-looking plasma tv, but the screen is cracked. You can see some exposed wire in the back.</look>
+        <look type="script">
+          msg ("A nice-looking plasma tv, but the screen is cracked. You can see an exposed {object:wire} in the back.")
+          MakeObjectVisible (wire)
+        </look>
         <contentsprefix>on the ground there lies</contentsprefix>
         <takemsg>It looks heavy, and besides, what do you want with a broken TV anyways?</takemsg>
-        <switchonmsg>The TV is very broken. This is not working.</switchonmsg>
+        <cannotswitchon>The TV is very broken. This is not working.</cannotswitchon>
         <switchoffmsg>It is already switched off. Also broken.</switchoffmsg>
         <onswitchon type="script">
-          SwitchOff (television)
         </onswitchon>
+        <onswitchoff type="script">
+        </onswitchoff>
+        <attr name="wire_cut" type="boolean">false</attr>
+        <not_all />
       </object>
       <object name="wire">
         <inherit name="editor_object" />
-        <look>There is some exposed wire sticking out the back of the TV.</look>
-        <scenery />
+        <look>There is an exposed wire sticking out the back of the TV.</look>
+        <scenery type="boolean">false</scenery>
         <attr name="feature_usegive" type="boolean">false</attr>
         <take type="boolean">false</take>
         <not_all />
         <takemsg>You try to pull the wire out of the TV, but it doesn't give.</takemsg>
-        <visible />
+        <visible type="boolean">false</visible>
         <ontake type="script">
         </ontake>
       </object>
@@ -103,12 +130,7 @@
         <inherit name="editor_object" />
         <inherit name="editor_player" />
         <inherit name="female" />
-        <statusattributes type="stringdictionary">
-          <item>
-            <key>score</key>
-            <value>Score: !/10</value>
-          </item>
-        </statusattributes>
+        <statusattributes type="stringdictionary" />
         <score type="int">0</score>
         <alias>you</alias>
         <visible />
@@ -159,7 +181,7 @@
       <object name="circuit box">
         <inherit name="editor_object" />
         <visible />
-        <takemsg>Obviously not. It is embedded into the wall.</takemsg>
+        <takemsg>Obviously not. It's embedded in the wall.</takemsg>
         <look type="script"><![CDATA[
           OutputTextNoBr ("It seems to control the room's power, ")
           if (HasAttribute(this, "is_fixed")) {
@@ -188,6 +210,7 @@
             msg ("General advice: don't stick your fingers into live circuits.")
           </item>
         </fix>
+        <not_all />
       </object>
       <exit alias="back to the center" to="basement_center">
         <inherit name="northeastdirection" />
@@ -218,6 +241,7 @@
             msg ("The bookshelf towers a respectable height above you.")
           }
         </look>
+        <not_all />
         <object name="books">
           <inherit name="editor_object" />
           <inherit name="plural" />
@@ -229,14 +253,21 @@
           <selfuseon type="scriptdictionary">
             <item key="letter">
               if (IsSwitchedOn(lamp)) {
-                msg ("You finally get around to studying. Nothing like a kidnapping for motivation. Referencing the textbooks, you're able to solve the problem on the letter, and you're pretty sure you know the code to unlock the door.")
-                UnlockExit (basement_door)
+                if (letter.player_read = true) {
+                  msg ("You finally get around to studying. Nothing like a kidnapping for motivation. Referencing the textbooks, you're able to solve the problem on the letter, and you're pretty sure you know the code to unlock the door.")
+                  UnlockExit (basement_door)
+                }
+                else {
+                  msg ("It'd probably help to read the letter first.")
+                }
               }
               else {
                 msg ("There's not nearly enough light to make any meaningful progress here.")
               }
             </item>
           </selfuseon>
+          <takemsg>You scoop up the books. Knowledge is power, and you're now the most powerful person in the room.</takemsg>
+          <dropmsg>They scatter on the floor with a dull thud.</dropmsg>
         </object>
         <object name="pliers">
           <inherit name="editor_object" />
@@ -252,32 +283,43 @@
           </selfuseanything>
           <selfuseon type="scriptdictionary">
             <item key="wire">
-              if (not Got(wire)) {
-                msg ("You cut a wire free from the TV and take it.")
-                RemoveObject (wire)
-                AddToInventory (wire)
-                set (wire, "scenery", false)
-                set (wire, "take", true)
-                set (wire, "takemsg", "You pick it up.")
+              if (wire.visible = true) {
+                if (television.wire_cut = false) {
+                  msg ("You cut the wire free from the TV and take it.")
+                  AddToInventory (wire)
+                  set (wire, "scenery", false)
+                  set (wire, "take", true)
+                  set (wire, "takemsg", "You pick it up.")
+                  set (television, "wire_cut", true)
+                }
+                else {
+                  msg ("Cutting that won't help.")
+                }
               }
               else {
                 msg ("Cutting that won't help.")
               }
             </item>
             <item key="television">
-              if (not Got(wire)) {
-                msg ("You cut a wire free from the TV and take it.")
-                RemoveObject (wire)
-                AddToInventory (wire)
-                set (wire, "scenery", false)
-                set (wire, "take", true)
-                set (wire, "takemsg", "You pick it up.")
+              if (wire.visible = true) {
+                if (television.wire_cut = false) {
+                  msg ("You cut the wire free from the TV and take it.")
+                  AddToInventory (wire)
+                  set (wire, "scenery", false)
+                  set (wire, "take", true)
+                  set (wire, "takemsg", "You pick it up.")
+                  set (television, "wire_cut", true)
+                }
+                else {
+                  msg ("Cutting that won't help.")
+                }
               }
               else {
                 msg ("Cutting that won't help.")
               }
             </item>
           </selfuseon>
+          <takemsg>You grab them.</takemsg>
         </object>
       </object>
       <object name="desk">
@@ -289,18 +331,36 @@
         <listchildrenprefix>On the desk there lies</listchildrenprefix>
         <takemsg>We are looking at the same desk, right? This thing isn't fitting in your pockets.</takemsg>
         <look>A well-constructed desk. Is that...solid maple? Absolutely luxurious.</look>
+        <not_all />
         <object name="letter">
           <inherit name="editor_object" />
           <take />
           <attr name="feature_usegive" type="boolean">false</attr>
           <look type="script"><![CDATA[
             if (IsSwitchedOn(lamp)) {
-              msg ("\"Catherine,<br/><br/>Your performance in my class was abysmal. You and your partner completely neglected to work together on the final project. Now both of you are stuck in here until you can learn some cooperation.<br/><br/>Severely Disappointed,<br/>Professor Von Wienerberg\"<br/><br/>There's a complicated-looking homework problem on the back.<br/><br/>Well. Turns out your teacher's insane. No time to worry about that now, though. Right now, you need to focus on getting out of here, and apparently rescuing your project partner...what was her name again?")
+              TextFX_Typewriter ("\"Catherine,", 50)
+              SetTimeout (1) {
+                TextFX_Typewriter ("Your performance in my class was abysmal. You and your partner completely neglected to work together on the final project. Now both of you are stuck in here until you can learn some cooperation.", 25)
+                SetTimeout (5) {
+                  TextFX_Typewriter ("Severely Disappointed,", 50)
+                  SetTimeout (1) {
+                    TextFX_Typewriter ("Professor Von Wienerberg\"", 50)
+                    SetTimeout (2) {
+                      wait {
+                        msg ("<br/>There's a complicated-looking homework problem on the back.<br/><br/>Well. Turns out your teacher's insane. No time to worry about that now, though. Right now, you need to focus on getting out of here, and apparently rescuing your project partner...what was her name again?")
+                        set (letter, "player_read", true)
+                      }
+                    }
+                  }
+                }
+              }
             }
             else {
               msg ("The light is too dim for you to make out what the letter says.")
             }
           ]]></look>
+          <takemsg>You fold up the letter and tuck it away.</takemsg>
+          <attr name="player_read" type="boolean">false</attr>
         </object>
       </object>
       <exit alias="back to the center" to="basement_center">
@@ -317,6 +377,7 @@
         <lie>It does not look comfortable at all. Standing up is probably more restful than sleeping on that thing.</lie>
         <takemsg>You'd probably have to hire movers for that. Too bad you're trapped down here, completely cut off from the outside world.</takemsg>
         <look>A very old, very dusty bed.</look>
+        <not_all />
       </object>
       <object name="writing on the wall">
         <inherit name="editor_object" />
@@ -333,6 +394,8 @@
             msg ("The light is too dim, you cannot quite see what is written.")
           }
         ]]></look>
+        <not_all />
+        <takemsg>It's writing on the wall. Not exactly something you can pick up.</takemsg>
       </object>
       <exit alias="back to the center" to="basement_center">
         <inherit name="southwestdirection" />
@@ -344,14 +407,9 @@
     <pattern>fix</pattern>
     <defaultexpression>"You can't fix " + object.article + "."</defaultexpression>
   </verb>
-  <verb>
-    <property>cut</property>
-    <pattern>cut</pattern>
-    <defaultexpression>"You can't cut " + object.article + "."</defaultexpression>
-  </verb>
   <object name="chapel">
     <inherit name="editor_room" />
-    <description>The ceiling stretches high overhead. Rows of benches line the floor, leading up to a communion table and lectern. Large windows loom over the north end of the room, and the front door sits at the south end. To the side, there is a smaller door for the storage room.</description>
+    <description>The ceiling stretches high overhead. Rows of benches line the floor, leading up to a lectern and communion table at the north end of the church, with large windows looming above. The front door sits at the south end.</description>
     <usedefaultprefix type="boolean">false</usedefaultprefix>
     <prefix>the</prefix>
     <object name="benches">
@@ -360,39 +418,105 @@
       <look>Uncomfortable wooden benches, perfect for preventing children from sitting still during service.</look>
       <usedefaultprefix type="boolean">false</usedefaultprefix>
       <scenery />
+      <takemsg>You don't want these benches. They're not really useful for anything.</takemsg>
+      <not_all />
     </object>
     <object name="lectern">
       <inherit name="editor_object" />
       <look>The pulpit radiates authority, even with the church in this dark, empty state.</look>
       <scenery />
+      <takemsg>You're far too intimidated to consider moving the lectern.</takemsg>
+      <not_all />
     </object>
     <object name="communion table">
       <inherit name="editor_object" />
       <scenery />
-    </object>
-    <object name="window">
-      <inherit name="editor_object" />
-      <scenery />
-    </object>
-    <object name="front door">
-      <inherit name="editor_object" />
-      <scenery />
-    </object>
-    <object name="storage door">
-      <inherit name="editor_object" />
-      <scenery />
+      <takemsg>Probably not. That feels sacrilegious.</takemsg>
+      <look>Simply adorned, the table has a religious text atop it.</look>
+      <not_all />
     </object>
     <object name="ceiling">
       <inherit name="editor_object" />
       <scenery />
       <look>You look up for a moment, but quickly look back down before you get dizzy.</look>
+      <takemsg>You can't even reach it.</takemsg>
+      <not_all />
     </object>
     <object name="Sharon">
       <inherit name="editor_object" />
-      <inherit name="namedfemale" />
+      <inherit name="female" />
+      <visible type="boolean">false</visible>
+      <alias>storage room door</alias>
+      <displayverbs type="stringlist">
+        <value>Look at</value>
+      </displayverbs>
+      <look type="script"><![CDATA[
+        firsttime {
+          msg ("\"Catherine? Is that you? It's me, Sharon! Professor Von Wienerberg trapped me in here!\"<br/><br/>Phew. It's a good thing she told you her name, it'd be incredibly awkward to ask her at this point. Also, you should probably get on rescuing her.")
+          set (Sharon, "alias", "Sharon's door")
+          set (Sharon, "displayverbs", ListCombine(Sharon.displayverbs, Split("Speak to")))
+        }
+        otherwise {
+          msg ("An unremarkable door that's keeping an unremarkable person trapped. (Don't tell Sharon I said that)")
+        }
+      ]]></look>
+      <speak type="script">
+        if (Sharon.alias = "storage room door") {
+          msg ("It says nothing. The person behind it, however, is not so quiet. Probably worth a closer look.")
+        }
+      </speak>
+      <usestandardverblist />
+    </object>
+    <object name="front door">
+      <inherit name="editor_object" />
+      <scenery type="boolean">false</scenery>
+      <look>Tall and imposing, the front door of the church is also very locked.</look>
+      <feature_usegive />
+      <use type="script"><![CDATA[
+        if (not ListContains(ScopeVisible(), Sharon)) {
+          msg ("You try to exit the chapel, but the door doesn't budge. It's locked from the outside. You're going to need to find another way out.<br/><br/>You hear shouting coming from a {object:Sharon} of the chapel.")
+          MakeObjectVisible (Sharon)
+        }
+        else {
+          msg ("You try to exit the chapel, but the door doesn't budge. It's locked from the outside. You're going to need to find another way out.")
+        }
+      ]]></use>
+      <displayverbs type="stringlist">
+        <value>Look at</value>
+        <value>Take</value>
+        <value>Use</value>
+      </displayverbs>
+      <givesingle type="boolean">false</givesingle>
+      <usedefaultprefix type="boolean">false</usedefaultprefix>
+      <prefix>the</prefix>
+      <not_all />
+      <takemsg>You'd steal the door off a church? That's low.</takemsg>
+    </object>
+    <object name="windows">
+      <inherit name="editor_object" />
+      <inherit name="plural" />
+      <scenery type="boolean">false</scenery>
+      <usedefaultprefix type="boolean">false</usedefaultprefix>
+      <feature_usegive />
+      <use type="script"><![CDATA[
+        if (not ListContains(ScopeVisible(), Sharon)) {
+          msg ("You try to exit the chapel, but the windows are too high to reach. You're going to need to find a way to get up there.<br/><br/>You hear shouting coming from a {object:Sharon} of the chapel.")
+          MakeObjectVisible (Sharon)
+        }
+        else {
+          msg ("You try to exit the chapel, but the windows are too high to reach. You're going to need to find a way to get up there.")
+        }
+      ]]></use>
+      <not_all />
+      <takemsg>You'd steal the windows off a church? That's low.</takemsg>
     </object>
     <exit alias="down" to="basement_center">
       <inherit name="downdirection" />
+      <runscript type="boolean">false</runscript>
+      <script type="script">
+        MoveObject (player, basement_center)
+        DisableTimer (sharon_timer)
+      </script>
     </exit>
   </object>
 </asl>
