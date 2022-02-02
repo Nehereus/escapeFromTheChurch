@@ -818,7 +818,7 @@
           MakeObjectVisible (Sharon)
         }
         else if (Sharon.alias = "Sharon") {
-          msg ("With Sharon's help, you're able to climb up out the window, and you go around front to let her out the door. With professor's book in your hand, <br/><br/>Congratulations! You've beat Escape the Church!")
+          msg ("With Sharon's help, you're able to climb up out the window, and you go around front to let her out the door. With professor's textbook in your hand, you finally think that the material of this course may actually help a lot in real life. You decide that you will study the book with Sharon again, complete the final project with her and request a makeup test from your porfessor.<br/><br/>Congratulations! You've beat Escape the Church!")
           finish
         }
         else {
