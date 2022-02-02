@@ -40,74 +40,42 @@
     <inherit name="editor_room" />
     <isroom />
     <description type="string"></description>
-    <object name="basement_northwest">
+    <object name="basement_north">
       <inherit name="editor_room" />
-      <alias>northwest corner of the basement</alias>
+      <alias>north of the basement</alias>
       <usedefaultprefix type="boolean">false</usedefaultprefix>
       <prefix>the</prefix>
       <suffix type="string"></suffix>
-      <object name="lamp">
+      <object name="bed">
         <inherit name="editor_object" />
-        <inherit name="switchable" />
-        <visible />
-        <scenery type="boolean">false</scenery>
-        <usedefaultprefix />
-        <look>The tall metal floor lamp looms in the corner. It's clearly been disused for some time, as it's covered with dust.</look>
-        <alias>lamp</alias>
-        <feature_switchable />
-        <switchoffmsg>You plunge the room back into darkness.</switchoffmsg>
-        <cannotswitchon>You hear a click, but the lamp doesn't turn on.</cannotswitchon>
-        <switchonmsg>You click the lamp on, and light fills the room. Much better.</switchonmsg>
-        <takemsg>This lamp is as tall as you are. You don't want to upset it by getting handsy.</takemsg>
+        <lie>It does not look comfortable at all. Standing up is probably more restful than sleeping on that thing.</lie>
+        <takemsg>You'd probably have to hire movers for that. Too bad you're trapped down here, completely cut off from the outside world.</takemsg>
+        <look>A very old, very dusty bed.</look>
         <not_all />
-        <onswitchon type="script">
-          MakeExitVisible (basement_door)
-        </onswitchon>
-        <onswitchoff type="script">
-          MakeExitInvisible (basement_door)
-        </onswitchoff>
       </object>
-      <object name="television">
+      <object name="writing on the wall">
         <inherit name="editor_object" />
-        <inherit name="surface" />
-        <inherit name="switchable" />
-        <alias>tv</alias>
-        <visible />
-        <feature_switchable />
-        <attr name="feature_container" type="boolean">false</attr>
-        <hidechildren />
-        <listchildren />
-        <listchildrenprefix>it attachs </listchildrenprefix>
-        <contentsprefix>on the ground there lies</contentsprefix>
-        <takemsg>It looks heavy, and besides, what do you want with a broken TV anyways?</takemsg>
-        <cannotswitchon>The TV is very broken. This is not working.</cannotswitchon>
-        <switchoffmsg>It is already switched off. Also broken.</switchoffmsg>
-        <attr name="wire_cut" type="boolean">false</attr>
+        <inherit name="plural" />
+        <usedefaultprefix type="boolean">false</usedefaultprefix>
+        <prefix>some</prefix>
+        <drop type="boolean">false</drop>
         <not_all />
-        <look type="script">
-          msg ("A nice-looking plasma tv, but the screen is cracked. You can see an exposed {object:wire} in the back.")
-          MakeObjectVisible (wire)
-        </look>
-        <onswitchon type="script">
-        </onswitchon>
-        <onswitchoff type="script">
-        </onswitchoff>
+        <takemsg>It's writing on the wall. Not exactly something you can pick up.</takemsg>
+        <look type="script"><![CDATA[
+          if (IsSwitchedOn(lamp)) {
+            PrintCentered ("Still remember 290 materials? <br/>Time to Review!")
+            msg ("A message. Looks like Dr. Wienerberg's handwiring.")
+          }
+          else {
+            msg ("The light is too dim, you cannot quite see what is written.")
+          }
+        ]]></look>
       </object>
-      <object name="wire">
-        <inherit name="editor_object" />
-        <look>There is an exposed wire sticking out the back of the TV.</look>
-        <scenery type="boolean">false</scenery>
-        <attr name="feature_usegive" type="boolean">false</attr>
-        <take type="boolean">false</take>
-        <not_all />
-        <takemsg>You try to pull the wire out of the TV, but it doesn't give.</takemsg>
-        <visible type="boolean">false</visible>
-        <ontake type="script">
-        </ontake>
-      </object>
-      <exit alias="back to the center" to="basement_center">
-        <inherit name="southeastdirection" />
-        <visible />
+      <exit alias="south" to="basement_center">
+        <inherit name="southdirection" />
+      </exit>
+      <exit alias="west" to="basement_northwest">
+        <inherit name="westdirection" />
       </exit>
     </object>
     <object name="basement_center">
@@ -142,23 +110,11 @@
         <usedefaultprefix />
         <takemsg>For better or worse, you always have yourself.</takemsg>
       </object>
-      <exit alias="northeast" to="basement_northeast">
-        <inherit name="northeastdirection" />
-      </exit>
-      <exit alias="southeast" to="basement_southeast">
-        <inherit name="southeastdirection" />
-      </exit>
-      <exit alias="southwest" to="basement_southwest">
-        <inherit name="southwestdirection" />
-      </exit>
-      <exit alias="northwest" to="basement_northwest">
-        <inherit name="northwestdirection" />
-      </exit>
       <exit name="basement_door" alias="up" to="chapel">
         <inherit name="updirection" />
-        <scenery type="boolean">false</scenery>
+        <scenery />
         <locked />
-        <visible type="boolean">false</visible>
+        <visible />
         <lockmessage>You go to exit, but the door is locked. It appears to require some kind of code.</lockmessage>
         <runscript />
         <script type="script">
@@ -171,13 +127,25 @@
           }
         </script>
       </exit>
+      <exit alias="north" to="basement_north">
+        <inherit name="northdirection" />
+      </exit>
+      <exit alias="west" to="basement_west">
+        <inherit name="westdirection" />
+      </exit>
+      <exit alias="east" to="basement_east">
+        <inherit name="eastdirection" />
+      </exit>
+      <exit alias="northwest" to="basement_northwest">
+        <inherit name="northwestdirection" />
+      </exit>
     </object>
-    <object name="basement_southwest">
+    <object name="basement_west">
       <inherit name="editor_room" />
       <usedefaultprefix type="boolean">false</usedefaultprefix>
       <prefix>the</prefix>
       <suffix type="string"></suffix>
-      <alias>southwest corner of the basement</alias>
+      <alias>west side of the basement</alias>
       <object name="circuit box">
         <inherit name="editor_object" />
         <visible />
@@ -212,15 +180,56 @@
           </item>
         </fix>
       </object>
-      <exit alias="back to the center" to="basement_center">
-        <inherit name="northeastdirection" />
+      <object name="television">
+        <inherit name="editor_object" />
+        <inherit name="surface" />
+        <inherit name="switchable" />
+        <alias>tv</alias>
+        <visible />
+        <feature_switchable />
+        <attr name="feature_container" type="boolean">false</attr>
+        <hidechildren />
+        <listchildren />
+        <listchildrenprefix>it attachs </listchildrenprefix>
+        <contentsprefix>on the ground there lies</contentsprefix>
+        <takemsg>It looks heavy, and besides, what do you want with a broken TV anyways?</takemsg>
+        <cannotswitchon>The TV is very broken. This is not working.</cannotswitchon>
+        <switchoffmsg>It is already switched off. Also broken.</switchoffmsg>
+        <attr name="wire_cut" type="boolean">false</attr>
+        <not_all />
+        <look type="script">
+          msg ("A nice-looking plasma tv, but the screen is cracked. You can see an exposed {object:wire} in the back.")
+          MakeObjectVisible (wire)
+        </look>
+        <onswitchon type="script">
+        </onswitchon>
+        <onswitchoff type="script">
+        </onswitchoff>
+        <object name="wire">
+          <inherit name="editor_object" />
+          <look>There is an exposed wire sticking out the back of the TV.</look>
+          <scenery type="boolean">false</scenery>
+          <attr name="feature_usegive" type="boolean">false</attr>
+          <take type="boolean">false</take>
+          <not_all />
+          <takemsg>You try to pull the wire out of the TV, but it doesn't give.</takemsg>
+          <visible type="boolean">false</visible>
+          <ontake type="script">
+          </ontake>
+        </object>
+      </object>
+      <exit alias="east" to="basement_center">
+        <inherit name="eastdirection" />
+      </exit>
+      <exit alias="north" to="basement_northwest">
+        <inherit name="northdirection" />
       </exit>
     </object>
-    <object name="basement_southeast">
+    <object name="basement_east">
       <inherit name="editor_room" />
       <usedefaultprefix type="boolean">false</usedefaultprefix>
       <prefix>the</prefix>
-      <alias>southeast corner of the basement</alias>
+      <alias>east side of the basement</alias>
       <object name="bookshelf">
         <inherit name="editor_object" />
         <inherit name="surface" />
@@ -376,42 +385,45 @@
           ]]></look>
         </object>
       </object>
-      <exit alias="back to the center" to="basement_center">
-        <inherit name="northwestdirection" />
+      <exit alias="west" to="basement_center">
+        <inherit name="westdirection" />
       </exit>
     </object>
-    <object name="basement_northeast">
+    <object name="basement_northwest">
       <inherit name="editor_room" />
-      <alias>northeast corner of the basement</alias>
+      <alias>northwest corner of the basement</alias>
       <usedefaultprefix type="boolean">false</usedefaultprefix>
       <prefix>the</prefix>
-      <object name="bed">
+      <object name="lamp">
         <inherit name="editor_object" />
-        <lie>It does not look comfortable at all. Standing up is probably more restful than sleeping on that thing.</lie>
-        <takemsg>You'd probably have to hire movers for that. Too bad you're trapped down here, completely cut off from the outside world.</takemsg>
-        <look>A very old, very dusty bed.</look>
+        <inherit name="switchable" />
+        <visible />
+        <scenery type="boolean">false</scenery>
+        <usedefaultprefix />
+        <look>The tall metal floor lamp looms in the corner. It's clearly been disused for some time, as it's covered with dust.</look>
+        <alias>lamp</alias>
+        <feature_switchable />
+        <switchoffmsg>You plunge the room back into darkness.</switchoffmsg>
+        <cannotswitchon>You hear a click, but the lamp doesn't turn on.</cannotswitchon>
+        <switchonmsg>You click the lamp on, and light fills the room. Much better.</switchonmsg>
+        <takemsg>This lamp is as tall as you are. You don't want to upset it by getting handsy.</takemsg>
         <not_all />
+        <onswitchon type="script">
+          MakeExitVisible (basement_door)
+          set (basement_door, "scenery", false)
+        </onswitchon>
+        <onswitchoff type="script">
+          MakeExitInvisible (basement_door)
+        </onswitchoff>
       </object>
-      <object name="writing on the wall">
-        <inherit name="editor_object" />
-        <inherit name="plural" />
-        <usedefaultprefix type="boolean">false</usedefaultprefix>
-        <prefix>some</prefix>
-        <drop type="boolean">false</drop>
-        <not_all />
-        <takemsg>It's writing on the wall. Not exactly something you can pick up.</takemsg>
-        <look type="script"><![CDATA[
-          if (IsSwitchedOn(lamp)) {
-            PrintCentered ("Still remember 290 materials? <br/>Time to Review!")
-            msg ("A message. Looks like Dr. Wienerberg's handwiring.")
-          }
-          else {
-            msg ("The light is too dim, you cannot quite see what is written.")
-          }
-        ]]></look>
-      </object>
-      <exit alias="back to the center" to="basement_center">
-        <inherit name="southwestdirection" />
+      <exit alias="southeast" to="basement_center">
+        <inherit name="southeastdirection" />
+      </exit>
+      <exit alias="south" to="basement_west">
+        <inherit name="southdirection" />
+      </exit>
+      <exit alias="east" to="basement_north">
+        <inherit name="eastdirection" />
       </exit>
     </object>
   </object>
@@ -542,6 +554,11 @@
       <feature_usegive />
       <not_all />
       <takemsg>You'd steal the windows off a church? That's low.</takemsg>
+      <displayverbs type="stringlist">
+        <value>Look at</value>
+        <value>Take</value>
+        <value>Use</value>
+      </displayverbs>
       <use type="script"><![CDATA[
         if (not ListContains(ScopeVisible(), Sharon)) {
           msg ("You try to exit the chapel, but the windows are too high to reach. You're going to need to find a way to get up there.<br/><br/>You hear shouting coming from the {object:Sharon}.")
@@ -555,11 +572,6 @@
           msg ("You try to exit the chapel, but the windows are too high to reach. You're going to need to find a way to get up there.")
         }
       ]]></use>
-      <displayverbs type="stringlist">
-        <value>Look at</value>
-        <value>Take</value>
-        <value>Use</value>
-      </displayverbs>
     </object>
     <exit alias="down" to="basement_center">
       <inherit name="downdirection" />
