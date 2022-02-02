@@ -541,7 +541,7 @@
       </script>
     </exit>
   </object>
-  <object name="front of the church">
+  <object name="front of the chapel">
     <inherit name="editor_room" />
     <object name="windows">
       <inherit name="editor_object" />
