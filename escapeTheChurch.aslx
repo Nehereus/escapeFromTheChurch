@@ -187,11 +187,6 @@
         <alias>tv</alias>
         <visible />
         <feature_switchable />
-        <attr name="feature_container" type="boolean">false</attr>
-        <hidechildren />
-        <listchildren />
-        <listchildrenprefix>it attachs </listchildrenprefix>
-        <contentsprefix>on the ground there lies</contentsprefix>
         <takemsg>It looks heavy, and besides, what do you want with a broken TV anyways?</takemsg>
         <cannotswitchon>The TV is very broken. This is not working.</cannotswitchon>
         <switchoffmsg>It is already switched off. Also broken.</switchoffmsg>
@@ -453,61 +448,6 @@
       <takemsg>You can't even reach it.</takemsg>
       <not_all />
     </object>
-    <object name="Sharon">
-      <inherit name="editor_object" />
-      <inherit name="female" />
-      <visible type="boolean">false</visible>
-      <alias>storage room door</alias>
-      <displayverbs type="stringlist">
-        <value>Look at</value>
-      </displayverbs>
-      <usestandardverblist />
-      <attr name="has_been_annoying" type="boolean">false</attr>
-      <usedefaultprefix type="boolean">false</usedefaultprefix>
-      <prefix>the</prefix>
-      <look type="script"><![CDATA[
-        firsttime {
-          msg ("\"Catherine? Is that you? It's me, Sharon! Professor Von Wienerberg trapped me in here!\"<br/><br/>Phew. It's a good thing she told you her name, it'd be incredibly awkward to ask her at this point. Also, you should probably get on rescuing her.")
-          set (Sharon, "alias", "Sharon's door")
-          set (Sharon, "displayverbs", ListCombine(Sharon.displayverbs, Split("Speak to")))
-          set (Sharon, "prefix", "")
-        }
-        otherwise {
-          if (Sharon.alias = "Sharon's door") {
-            msg ("An unremarkable door that's keeping an unremarkable person trapped. (Don't tell Sharon I said that)")
-          }
-          else {
-            msg ("Your neglected project partner, finally free.")
-          }
-        }
-      ]]></look>
-      <speak type="script">
-        if (Sharon.alias = "storage room door") {
-          msg ("It says nothing. The person behind it, however, is not so quiet. Probably worth a closer look.")
-        }
-        else if (Sharon.alias = "Sharon's door") {
-          msg ("\"Help me, Catherine! There's some kind of weird puzzle in here, but I have no idea how to solve it!\"")
-        }
-        else {
-          msg ("\"Thank you so much for getting me out of there!\"")
-        }
-      </speak>
-      <unlock type="script"><![CDATA[
-        if (Sharon.alias = "Sharon's door") {
-          if (Sharon.has_been_annoying = true) {
-            msg ("You feel your frustration with mounting and mounting. Stupid Professor Von Wienerberg locking you in this stupid church with these stupid puzzles! In a fit of rage, you throw yourself against Sharon's door and rip it clean off the hinges.<br/><br/>Wow. Property damage aside, that was spectacular.<br/><br/>Sharon gingerly steps out.")
-            set (Sharon, "alias", "Sharon")
-            set (Sharon, "displayverbs", Split("Look at;Speak to", ";"))
-          }
-          else {
-            msg ("You can't do that.")
-          }
-        }
-        else {
-          msg ("You can't do that.")
-        }
-      ]]></unlock>
-    </object>
     <object name="front door">
       <inherit name="editor_object" />
       <scenery type="boolean">false</scenery>
@@ -587,5 +527,60 @@
   </object>
   <object name="storage room">
     <inherit name="editor_room" />
+    <object name="Sharon">
+      <inherit name="editor_object" />
+      <inherit name="female" />
+      <visible type="boolean">false</visible>
+      <alias>storage room door</alias>
+      <displayverbs type="stringlist">
+        <value>Look at</value>
+      </displayverbs>
+      <usestandardverblist />
+      <attr name="has_been_annoying" type="boolean">false</attr>
+      <usedefaultprefix type="boolean">false</usedefaultprefix>
+      <prefix>the</prefix>
+      <look type="script"><![CDATA[
+        firsttime {
+          msg ("\"Catherine? Is that you? It's me, Sharon! Professor Von Wienerberg trapped me in here!\"<br/><br/>Phew. It's a good thing she told you her name, it'd be incredibly awkward to ask her at this point. Also, you should probably get on rescuing her.")
+          set (Sharon, "alias", "Sharon's door")
+          set (Sharon, "displayverbs", ListCombine(Sharon.displayverbs, Split("Speak to")))
+          set (Sharon, "prefix", "")
+        }
+        otherwise {
+          if (Sharon.alias = "Sharon's door") {
+            msg ("An unremarkable door that's keeping an unremarkable person trapped. (Don't tell Sharon I said that)")
+          }
+          else {
+            msg ("Your neglected project partner, finally free.")
+          }
+        }
+      ]]></look>
+      <speak type="script">
+        if (Sharon.alias = "storage room door") {
+          msg ("It says nothing. The person behind it, however, is not so quiet. Probably worth a closer look.")
+        }
+        else if (Sharon.alias = "Sharon's door") {
+          msg ("\"Help me, Catherine! There's some kind of weird puzzle in here, but I have no idea how to solve it!\"")
+        }
+        else {
+          msg ("\"Thank you so much for getting me out of there!\"")
+        }
+      </speak>
+      <unlock type="script"><![CDATA[
+        if (Sharon.alias = "Sharon's door") {
+          if (Sharon.has_been_annoying = true) {
+            msg ("You feel your frustration with mounting and mounting. Stupid Professor Von Wienerberg locking you in this stupid church with these stupid puzzles! In a fit of rage, you throw yourself against Sharon's door and rip it clean off the hinges.<br/><br/>Wow. Property damage aside, that was spectacular.<br/><br/>Sharon gingerly steps out.")
+            set (Sharon, "alias", "Sharon")
+            set (Sharon, "displayverbs", Split("Look at;Speak to", ";"))
+          }
+          else {
+            msg ("You can't do that.")
+          }
+        }
+        else {
+          msg ("You can't do that.")
+        }
+      ]]></unlock>
+    </object>
   </object>
 </asl>
