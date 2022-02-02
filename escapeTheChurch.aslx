@@ -446,20 +446,6 @@
       <takemsg>You don't want these benches. They're not really useful for anything.</takemsg>
       <not_all />
     </object>
-    <object name="lectern">
-      <inherit name="editor_object" />
-      <look>The pulpit radiates authority, even with the church in this dark, empty state.</look>
-      <scenery />
-      <takemsg>You're far too intimidated to consider moving the lectern.</takemsg>
-      <not_all />
-    </object>
-    <object name="communion table">
-      <inherit name="editor_object" />
-      <scenery />
-      <takemsg>Probably not. That feels sacrilegious.</takemsg>
-      <look>Simply adorned, the table has a religious text atop it.</look>
-      <not_all />
-    </object>
     <object name="ceiling">
       <inherit name="editor_object" />
       <scenery />
@@ -546,6 +532,17 @@
         }
       </use>
     </object>
+    <exit alias="down" to="basement_center">
+      <inherit name="downdirection" />
+      <runscript type="boolean">false</runscript>
+      <script type="script">
+        MoveObject (player, basement_center)
+        DisableTimer (sharon_timer)
+      </script>
+    </exit>
+  </object>
+  <object name="front of the church">
+    <inherit name="editor_room" />
     <object name="windows">
       <inherit name="editor_object" />
       <inherit name="plural" />
@@ -573,13 +570,22 @@
         }
       ]]></use>
     </object>
-    <exit alias="down" to="basement_center">
-      <inherit name="downdirection" />
-      <runscript type="boolean">false</runscript>
-      <script type="script">
-        MoveObject (player, basement_center)
-        DisableTimer (sharon_timer)
-      </script>
-    </exit>
+    <object name="lectern">
+      <inherit name="editor_object" />
+      <look>The pulpit radiates authority, even with the church in this dark, empty state.</look>
+      <scenery />
+      <takemsg>You're far too intimidated to consider moving the lectern.</takemsg>
+      <not_all />
+    </object>
+    <object name="communion table">
+      <inherit name="editor_object" />
+      <scenery />
+      <takemsg>Probably not. That feels sacrilegious.</takemsg>
+      <look>Simply adorned, the table has a religious text atop it.</look>
+      <not_all />
+    </object>
+  </object>
+  <object name="storage room">
+    <inherit name="editor_room" />
   </object>
 </asl>
