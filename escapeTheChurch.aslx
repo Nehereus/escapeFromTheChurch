@@ -168,6 +168,7 @@
             msg ("You use the spare bit of wire to repair the broken circuit.")
             set (lamp, "cannotswitchon", null)
             RemoveObject (wire)
+            SetObjectFlagOn (circuit box, "is_fixed")
           </item>
           <item key="books">
             msg ("You don't need a book to tell you how to fix this. You need something to actually fix it with.")
@@ -198,8 +199,13 @@
         <attr name="wire_cut" type="boolean">false</attr>
         <not_all />
         <look type="script">
-          msg ("A nice-looking plasma tv, but the screen is cracked. You can see an exposed {object:wire} in the back.")
-          MakeObjectVisible (wire)
+          if (not ListContains(ScopeVisible(), wire)) {
+            msg ("A nice-looking plasma tv, but the screen is cracked. You can see an exposed {object:wire} in the back.")
+            MakeObjectVisible (wire)
+          }
+          else {
+            msg ("A nice-looking plasma tv, but the screen is cracked. It should stay in a trash chute now.")
+          }
         </look>
         <onswitchon type="script">
         </onswitchon>
