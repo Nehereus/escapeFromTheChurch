@@ -94,22 +94,6 @@
           msg ("The room is too dark to make out much of your surroundings.")
         }
       </description>
-      <object name="player">
-        <inherit name="editor_object" />
-        <inherit name="editor_player" />
-        <inherit name="female" />
-        <statusattributes type="stringdictionary" />
-        <score type="int">0</score>
-        <alias>you</alias>
-        <visible />
-        <gender>she</gender>
-        <article>she</article>
-        <possessive>her</possessive>
-        <scenery type="boolean">false</scenery>
-        <isroom type="boolean">false</isroom>
-        <usedefaultprefix />
-        <takemsg>For better or worse, you always have yourself.</takemsg>
-      </object>
       <exit name="basement_door" alias="up" to="chapel">
         <inherit name="updirection" />
         <scenery />
@@ -139,6 +123,22 @@
       <exit alias="northwest" to="basement_northwest">
         <inherit name="northwestdirection" />
       </exit>
+      <object name="player">
+        <inherit name="editor_object" />
+        <inherit name="editor_player" />
+        <inherit name="female" />
+        <statusattributes type="stringdictionary" />
+        <score type="int">0</score>
+        <alias>you</alias>
+        <visible />
+        <gender>she</gender>
+        <article>she</article>
+        <possessive>her</possessive>
+        <scenery type="boolean">false</scenery>
+        <isroom type="boolean">false</isroom>
+        <usedefaultprefix />
+        <takemsg>For better or worse, you always have yourself.</takemsg>
+      </object>
     </object>
     <object name="basement_west">
       <inherit name="editor_room" />
@@ -276,7 +276,7 @@
             </item>
             <item key="Sharon">
               if (Sharon.alias="Sharon's door") {
-                msg ("You try to relay some of the information in the textbooks to Sharon, but you two are just not clicking. As you get more and more frustrated, you remember why you didn't work with her in the first place.")
+                msg ("You read the book, trying to find some useful knowledge and share it with Sharon. Talking over the door, you begin to realize that you don't actually hate her. You did not like her simply because she is your lab partner and you did not enjoy lab experiments and reports. ")
                 set (Sharon, "has_been_annoying", true)
                 set (Sharon, "displayverbs", ListCombine(Sharon.displayverbs, Split("Unlock")))
               }
@@ -472,61 +472,15 @@
         }
       </use>
     </object>
-    <exit alias="down" to="basement_center">
+    <exit alias="the basement" to="basement_center">
       <inherit name="downdirection" />
       <runscript type="boolean">false</runscript>
       <script type="script">
         MoveObject (player, basement_center)
         DisableTimer (sharon_timer)
       </script>
+      <prefix>to</prefix>
     </exit>
-  </object>
-  <object name="front of the chapel">
-    <inherit name="editor_room" />
-    <object name="windows">
-      <inherit name="editor_object" />
-      <inherit name="plural" />
-      <scenery type="boolean">false</scenery>
-      <usedefaultprefix type="boolean">false</usedefaultprefix>
-      <feature_usegive />
-      <not_all />
-      <takemsg>You'd steal the windows off a church? That's low.</takemsg>
-      <displayverbs type="stringlist">
-        <value>Look at</value>
-        <value>Take</value>
-        <value>Use</value>
-      </displayverbs>
-      <use type="script"><![CDATA[
-        if (not ListContains(ScopeVisible(), Sharon)) {
-          msg ("You try to exit the chapel, but the windows are too high to reach. You're going to need to find a way to get up there.<br/><br/>You hear shouting coming from the {object:Sharon}.")
-          MakeObjectVisible (Sharon)
-        }
-        else if (Sharon.alias = "Sharon") {
-          msg ("With Sharon's help, you're able to climb up out the window, and you go around front to let her out the door. Now, on to file a complaint with the dean regard Professor Von Wienerberg's unconventional teaching methods.<br/><br/>Congratulations! You've beat Escape the Church!")
-          finish
-        }
-        else {
-          msg ("You try to exit the chapel, but the windows are too high to reach. You're going to need to find a way to get up there.")
-        }
-      ]]></use>
-    </object>
-    <object name="lectern">
-      <inherit name="editor_object" />
-      <look>The pulpit radiates authority, even with the church in this dark, empty state.</look>
-      <scenery />
-      <takemsg>You're far too intimidated to consider moving the lectern.</takemsg>
-      <not_all />
-    </object>
-    <object name="communion table">
-      <inherit name="editor_object" />
-      <scenery />
-      <takemsg>Probably not. That feels sacrilegious.</takemsg>
-      <look>Simply adorned, the table has a religious text atop it.</look>
-      <not_all />
-    </object>
-  </object>
-  <object name="storage room">
-    <inherit name="editor_room" />
     <object name="Sharon">
       <inherit name="editor_object" />
       <inherit name="female" />
@@ -549,6 +503,9 @@
         otherwise {
           if (Sharon.alias = "Sharon's door") {
             msg ("An unremarkable door that's keeping an unremarkable person trapped. (Don't tell Sharon I said that)")
+          }
+          else if (Sharon.alias = "Sharon") {
+            msg ("You realize that you do not actually hate her. You did not like her simply because she was your lab partner and you did not enjoy lab experiments and reports. You begin to think that maybe you can be friend with her after all this.")
           }
           else {
             msg ("Your neglected project partner, finally free.")
@@ -582,5 +539,60 @@
         }
       ]]></unlock>
     </object>
+    <exit alias="north" to="front of the chapel">
+      <inherit name="northdirection" />
+    </exit>
+  </object>
+  <object name="front of the chapel">
+    <inherit name="editor_room" />
+    <description>You are at the north end of the church by the lectern and communion table.</description>
+    <usedefaultprefix type="boolean">false</usedefaultprefix>
+    <prefix>the</prefix>
+    <object name="windows">
+      <inherit name="editor_object" />
+      <inherit name="plural" />
+      <scenery type="boolean">false</scenery>
+      <usedefaultprefix type="boolean">false</usedefaultprefix>
+      <feature_usegive />
+      <not_all />
+      <takemsg>You'd steal the windows off a church? That's low.</takemsg>
+      <displayverbs type="stringlist">
+        <value>Look at</value>
+        <value>Take</value>
+        <value>Use</value>
+      </displayverbs>
+      <use type="script"><![CDATA[
+        if (not ListContains(ScopeVisible(), Sharon)) {
+          msg ("You try to exit the chapel, but the windows are too high to reach. You're going to need to find a way to get up there.<br/><br/>You hear shouting coming from the {object:Sharon} on the west side of the church.")
+          MakeObjectVisible (Sharon)
+        }
+        else if (Sharon.alias = "Sharon") {
+          msg ("With Sharon's help, you're able to climb up out the window, and you go around front to let her out the door. With professor's book in your hand, <br/><br/>Congratulations! You've beat Escape the Church!")
+          finish
+        }
+        else {
+          msg ("You try to exit the chapel, but the windows are too high to reach. You're going to need to find a way to get up there.")
+        }
+      ]]></use>
+    </object>
+    <object name="lectern">
+      <inherit name="editor_object" />
+      <look>The pulpit radiates authority, even with the church in this dark, empty state.</look>
+      <scenery />
+      <takemsg>You're far too intimidated to consider moving the lectern.</takemsg>
+      <not_all />
+      <visible />
+    </object>
+    <object name="communion table">
+      <inherit name="editor_object" />
+      <scenery />
+      <takemsg>Probably not. That feels sacrilegious.</takemsg>
+      <look>Simply adorned, the table has a religious text atop it.</look>
+      <not_all />
+    </object>
+    <exit alias="south" to="chapel">
+      <inherit name="southdirection" />
+      <prefix type="string"></prefix>
+    </exit>
   </object>
 </asl>
