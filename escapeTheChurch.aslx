@@ -30,7 +30,7 @@
     <start type="script"><![CDATA[
       msg ("Welcome to Escape the Church! If you get stuck, type HELP for some guidance. Also, keep in mind that not everything in this game is necessarily accessible by hyperlink. The text input isn't entirely decorative, you know.<br/><br/>Have fun!<br/>")
       wait {
-        msg ("You wake up in a dark room, with only dim light coming from your dying phone. It looks like you're in a basement. You feel the urge to get out of here as soon as possible.<br/>")
+        msg ("You wake up in a dark room, with only dim light filtering in from above. It looks like you're in a basement. You feel the urge to get out of here as soon as possible.<br/>")
         wait {
         }
       }
@@ -63,7 +63,7 @@
         <takemsg>It's writing on the wall. Not exactly something you can pick up.</takemsg>
         <look type="script"><![CDATA[
           if (IsSwitchedOn(lamp)) {
-            PrintCentered ("Still remember 290 materials? <br/>Time to Review!")
+            PrintCentered ("Still remember ECER290? <br/>Time to Review!")
             msg ("A message. Looks like Dr. Wienerberg's handwiring.")
           }
           else {
@@ -88,7 +88,7 @@
       <exitslistprefix>You can go</exitslistprefix>
       <description type="script">
         if (IsSwitchedOn(lamp)) {
-          msg ("Soft lamp light fills the room. To the northeast are the bed and writing on the wall. To the southeast are the bookshelf and desk. To the southwest is the circuit box. To the northwest are the lamp and TV. Additionally, you can now see the door out.")
+          msg ("Soft lamp light fills the room. To the northeast are the bed and writing on the wall. To the southeast are the bookshelf and desk. To the southwest is the circuit box. To the northwest are the lamp and TV. Additionally, you can now see the door to upstairs.")
         }
         else {
           msg ("The room is too dark to make out much of your surroundings.")
@@ -96,10 +96,10 @@
       </description>
       <exit name="basement_door" alias="up" to="chapel">
         <inherit name="updirection" />
-        <scenery />
+        <scenery type="boolean">false</scenery>
         <locked />
-        <visible />
-        <lockmessage>You go to exit, but the door is locked. It appears to require some kind of code.</lockmessage>
+        <visible type="boolean">false</visible>
+        <lockmessage>You go to exit, but the door is locked. It has a keypad on it. You're going to need to figure out some kind of code to get out of here.</lockmessage>
         <runscript />
         <script type="script">
           firsttime {
@@ -138,6 +138,23 @@
         <isroom type="boolean">false</isroom>
         <usedefaultprefix />
         <takemsg>For better or worse, you always have yourself.</takemsg>
+        <look>You're Catherine Wendorff. You're a second-year college student, and right now you're not very happy.</look>
+        <unlock>You stand still for a moment, lost in deep introspection. When you come back down to earth, you're still trapped physically, but spiritually, you've never felt freer.</unlock>
+      </object>
+      <object name="door">
+        <inherit name="editor_object" />
+        <scenery />
+        <visible type="boolean">false</visible>
+        <takemsg>You're much more concerned with opening it right now.</takemsg>
+        <look type="script">
+          OutputTextNoBr ("The door out of here. It has a keypad on it. ")
+          if (basement_door.locked = true) {
+            msg ("You're going to need to figure out some kind of code to open it.")
+          }
+          else {
+            msg ("Good thing you already solved the code.")
+          }
+        </look>
       </object>
     </object>
     <object name="basement_west">
@@ -230,11 +247,12 @@
           <inherit name="editor_object" />
           <look>There is an exposed wire sticking out the back of the TV.</look>
           <scenery type="boolean">false</scenery>
-          <attr name="feature_usegive" type="boolean">false</attr>
+          <feature_usegive />
           <take type="boolean">false</take>
           <not_all />
           <takemsg>You try to pull the wire out of the TV, but it doesn't give.</takemsg>
           <visible type="boolean">false</visible>
+          <use />
           <ontake type="script">
           </ontake>
           <cut type="scriptdictionary">
@@ -263,6 +281,14 @@
               msg ("You cannot cut the wire with a piece of papers.")
             </item>
           </cut>
+          <selfuseon type="scriptdictionary">
+            <item key="circuit box">
+              msg ("You use the spare bit of wire to repair the broken circuit.")
+              set (lamp, "cannotswitchon", null)
+              RemoveObject (wire)
+              SetObjectFlagOn (circuit box, "is_fixed")
+            </item>
+          </selfuseon>
         </object>
       </object>
       <exit alias="east" to="basement_center">
@@ -288,11 +314,16 @@
         <isopen />
         <listchildrenprefix>You found</listchildrenprefix>
         <contentsprefix>on which there are</contentsprefix>
-        <takemsg>This full bookshelf is somehow not budging, despite your best efforts.</takemsg>
+        <takemsg>This enormous bookshelf is somehow not budging, despite your best efforts.</takemsg>
         <not_all />
         <look type="script">
           if (not IsSwitchedOn(lamp)) {
-            msg ("The light is dim, but you manage to identify some items on the bookshelf.")
+            firsttime {
+              msg ("The light is dim, but you manage to identify some items on the bookshelf.")
+            }
+            otherwise {
+              msg ("The bookshelf towers a respectable height above you.")
+            }
           }
           else {
             msg ("The bookshelf towers a respectable height above you.")
@@ -301,20 +332,24 @@
         <object name="books">
           <inherit name="editor_object" />
           <inherit name="surface" />
-          <inherit name="plural" />
           <usedefaultprefix />
           <prefix>a</prefix>
           <take />
           <feature_usegive />
           <attr name="has_read" type="int">0</attr>
-          <dropmsg>They scatter on the floor with a dull thud.</dropmsg>
+          <dropmsg>It drops on the floor with a dull thud.</dropmsg>
           <feature_container />
           <hidechildren />
           <alias>textbook</alias>
           <scenery type="boolean">false</scenery>
-          <look type="script">
+          <look>A physics textbook. Might be good reading in your situation.</look>
+          <use />
+          <selfuseanything type="script">
+            msg ("Using books won't help here.")
+          </selfuseanything>
+          <read type="script">
             if (IsSwitchedOn(lamp)) {
-              msg ("Index")
+              msg ("Table of Contents")
               msg ("{object:first chapter:First Chapter}: Newtonian Physics")
               msg ("{object:second chapter:Second Chapter}: Electricity")
               msg ("{object:third chapter:Third Chapter}: Momentum and Collisions")
@@ -324,143 +359,44 @@
               msg ("{object:seventh chapter:Seventh Chapter}: the Wave Equation")
               msg ("{object:eighth chapter:Eighth Chapter}: Fluids")
               msg ("{object:ninth chapter:Ninth Chapter}: Oscillations")
-              msg ("hint: click the hyperlink to read")
+              msg ("note: click the hyperlink to read")
+              set (books, "hidechildren", false)
             }
             else {
-              msg ("The light is too dim for you to make out what the book says.")
+              msg ("You can't make out the finer text in this dim light.")
             }
-          </look>
-          <selfuseanything type="script">
-            msg ("Using books won't help here.")
-          </selfuseanything>
+          </read>
           <selfuseon type="scriptdictionary">
-            <item key="Sharon">
+            <item key="Sharon"><![CDATA[
               if (Sharon.alias="Sharon's door") {
-                msg ("You read the book, trying to find some useful knowledge and share it with Sharon. Talking over the door, you begin to realize that you don't actually hate her. You did not like her simply because she is your lab partner and you did not enjoy lab experiments and reports. ")
+                msg ("You read the book, trying to find some useful knowledge and share it with Sharon. Talking over the door, you begin to realize that you don't actually hate her. You did not like her simply because she is your lab partner and you did not enjoy lab experiments and reports. <br/><br/>After working together, you think you can unlock {object:Sharon}.")
                 set (Sharon, "has_been_annoying", true)
                 set (Sharon, "displayverbs", ListCombine(Sharon.displayverbs, Split("Unlock")))
               }
               else {
                 msg ("Using books won't help here.")
               }
-            </item>
+            ]]></item>
           </selfuseon>
-          <object name="third chapter">
+          <object name="first chapter">
             <inherit name="editor_object" />
             <scenery />
             <visible />
-            <drop type="boolean">false</drop>
             <not_all />
-            <alias>third chapter</alias>
+            <drop type="boolean">false</drop>
+            <alias>first chapter</alias>
             <look type="script">
-              msg ("This chapter starts with\"Momentum is a measurement of mass in motion ...\" You don't want to waste time on reading it.")
+              msg ("This chapter starts with \"Newtonian physics, also called Newtonian or classical mechanics, ...\" You don't want to waste time on reading it.")
               set (books, "has_read", 0)
             </look>
             <read type="script">
-              msg ("This chapter is boring. You don't want to read it.")
-              set (books, "has_read", 0)
-            </read>
-          </object>
-          <object name="fourth chapter">
-            <inherit name="editor_object" />
-            <scenery />
-            <visible />
-            <not_all />
-            <drop type="boolean">false</drop>
-            <alias>fourth chapter</alias>
-            <look type="script">
-              if (letter.player_read = true) {
-                msg ("You solve the first question by reading the chapter")
-                set (books, "has_read", 1)
-              }
-              else {
-                msg ("This chapter starts with \"The concepts of work and energy are closely tied to the concept of force because ...\" You don't want to waste time on reading it.")
-              }
-            </look>
-            <read type="script">
-              if (letter.player_read = true) {
-                msg ("You solve the first question by reading the chapter")
-                set (books, "has_read", 1)
-              }
-              else {
-                msg ("This chapter is boring. You don't want to waste time to read it.")
-              }
-            </read>
-          </object>
-          <object name="fifth chapter">
-            <inherit name="editor_object" />
-            <scenery />
-            <visible />
-            <drop type="boolean">false</drop>
-            <not_all />
-            <alias>fifth chapter</alias>
-            <look type="script">
-              msg ("This chapter starts with \"Torque is a measure of how much a force acting on an object causes that object to rotate ...\" You don't want to waste time on reading it.")
-              set (books, "has_read", 0)
-            </look>
-            <read type="script">
-              msg ("This chapter is boring. You don't want to read it.")
-              set (books, "has_read", 0)
-            </read>
-          </object>
-          <object name="seventh chapter">
-            <inherit name="editor_object" />
-            <scenery />
-            <visible />
-            <drop type="boolean">false</drop>
-            <not_all />
-            <alias>seventh chapter</alias>
-            <look type="script">
-              if (books.has_read = 2) {
-                msg ("When you just finish writing the answer for the third question. You heard somewhere a door opened.")
-                UnlockExit (basement_door)
-              }
-              else {
-                msg ("This chapter starts with \"The wave equation is a second-order linear partial differential equation for the ...\" You don't want to waste time on reading it.")
+              if (IsSwitchedOn(lamp)) {
+                msg ("This chapter is boring. You don't want to read it.")
                 set (books, "has_read", 0)
               }
-            </look>
-            <read type="script">
-              if (books.has_read = 2) {
-                msg ("When you just finish writing the answer for the third question. You heard somewhere a door opened.")
-                UnlockExit (basement_door)
-              }
               else {
-                msg ("This chapter is boring. You don't want to waste time to read it.")
-                set (books, "has_read", 0)
+                msg ("You can't make out the finer text in this dim light.")
               }
-            </read>
-          </object>
-          <object name="eighth chapter">
-            <inherit name="editor_object" />
-            <scenery />
-            <visible />
-            <drop type="boolean">false</drop>
-            <not_all />
-            <alias>eighth chapter</alias>
-            <look type="script">
-              msg ("This chapter starts with \"Flowing fluids behave different from static fluids ...\" You don't want to waste time on reading it.")
-              set (books, "has_read", 0)
-            </look>
-            <read type="script">
-              msg ("This chapter is boring. You don't want to read it.")
-              set (books, "has_read", 0)
-            </read>
-          </object>
-          <object name="ninth chapter">
-            <inherit name="editor_object" />
-            <scenery />
-            <visible />
-            <not_all />
-            <drop type="boolean">false</drop>
-            <alias>ninth chapter</alias>
-            <look type="script">
-              msg ("This chapter starts with \"Oscillation refers to the repeated back and forth movement of ...\" You don't want to waste time on reading it.")
-              set (books, "has_read", 0)
-            </look>
-            <read type="script">
-              msg ("This chapter is boring. You don't want to read it.")
-              set (books, "has_read", 0)
             </read>
           </object>
           <object name="second chapter">
@@ -481,13 +417,91 @@
               }
             </look>
             <read type="script">
-              if (books.has_read = 1) {
-                msg ("You solve the second question by reading this chapter")
-                set (books, "has_read", 2)
+              if (IsSwitchedOn(lamp)) {
+                if (books.has_read = 1) {
+                  msg ("You solve the second question by reading this chapter")
+                  set (books, "has_read", 2)
+                }
+                else {
+                  msg ("This chapter is boring. You don't want to waste time to read it.")
+                  set (books, "has_read", 0)
+                }
               }
               else {
-                msg ("This chapter is boring. You don't want to waste time to read it.")
+                msg ("You can't make out the finer text in this dim light.")
+              }
+            </read>
+          </object>
+          <object name="third chapter">
+            <inherit name="editor_object" />
+            <scenery />
+            <visible />
+            <drop type="boolean">false</drop>
+            <not_all />
+            <alias>third chapter</alias>
+            <look type="script">
+              msg ("This chapter starts with\"Momentum is a measurement of mass in motion ...\" You don't want to waste time on reading it.")
+              set (books, "has_read", 0)
+            </look>
+            <read type="script">
+              if (IsSwitchedOn(lamp)) {
+                msg ("This chapter is boring. You don't want to read it.")
                 set (books, "has_read", 0)
+              }
+              else {
+                msg ("You can't make out the finer text in this dim light.")
+              }
+            </read>
+          </object>
+          <object name="fourth chapter">
+            <inherit name="editor_object" />
+            <scenery />
+            <visible />
+            <not_all />
+            <drop type="boolean">false</drop>
+            <alias>fourth chapter</alias>
+            <look type="script">
+              if (letter.player_read = true) {
+                msg ("You solve the first question by reading the chapter")
+                set (books, "has_read", 1)
+              }
+              else {
+                msg ("This chapter starts with \"The concepts of work and energy are closely tied to the concept of force because ...\" You don't want to waste time on reading it.")
+              }
+            </look>
+            <read type="script">
+              if (IsSwitchedOn(lamp)) {
+                if (letter.player_read = true) {
+                  msg ("You solve the first question by reading the chapter")
+                  set (books, "has_read", 1)
+                }
+                else {
+                  msg ("This chapter is boring. You don't want to waste time to read it.")
+                }
+              }
+              else {
+                msg ("You can't make out the finer text in this dim light.")
+              }
+            </read>
+          </object>
+          <object name="fifth chapter">
+            <inherit name="editor_object" />
+            <scenery />
+            <visible />
+            <drop type="boolean">false</drop>
+            <not_all />
+            <alias>fifth chapter</alias>
+            <look type="script">
+              msg ("This chapter starts with \"Torque is a measure of how much a force acting on an object causes that object to rotate ...\" You don't want to waste time on reading it.")
+              set (books, "has_read", 0)
+            </look>
+            <read type="script">
+              if (IsSwitchedOn(lamp)) {
+                msg ("This chapter is boring. You don't want to read it.")
+                set (books, "has_read", 0)
+              }
+              else {
+                msg ("You can't make out the finer text in this dim light.")
               }
             </read>
           </object>
@@ -497,28 +511,92 @@
             <visible />
             <alias>sixth chapter</alias>
             <look type="script">
-              msg ("This chapter starts with \"Angular momentum is the rotational analog of linear momentum ...\"  You don't want to waste time on reading it.")
+              msg ("This chapter starts with \"angular momentum is the rotational analog of linear momentum ...\"  You don't want to waste time on reading it.")
               set (books, "has_read", 0)
             </look>
             <read type="script">
-              msg ("This chapter is boring. You don't want to read it.")
-              set (books, "has_read", 0)
+              if (IsSwitchedOn(lamp)) {
+                msg ("This chapter is boring. You don't want to read it.")
+                set (books, "has_read", 0)
+              }
+              else {
+                msg ("You can't make out the finer text in this dim light.")
+              }
             </read>
           </object>
-          <object name="first chapter">
+          <object name="seventh chapter">
+            <inherit name="editor_object" />
+            <scenery />
+            <visible />
+            <drop type="boolean">false</drop>
+            <not_all />
+            <alias>seventh chapter</alias>
+            <look type="script">
+              if (books.has_read = 2) {
+                msg ("When you just finish writing the answer for the third question. You heard somewhere a door opened.")
+                UnlockExit (basement_door)
+              }
+              else {
+                msg ("This chapter starts with \"The wave equation is a second-order linear partial differential equation for the ...\" You don't want to waste time on reading it.")
+                set (books, "has_read", 0)
+              }
+            </look>
+            <read type="script">
+              if (IsSwitchedOn(lamp)) {
+                if (books.has_read = 2) {
+                  msg ("When you just finish writing the answer for the third question. You heard somewhere a door opened.")
+                  UnlockExit (basement_door)
+                }
+                else {
+                  msg ("This chapter is boring. You don't want to waste time to read it.")
+                  set (books, "has_read", 0)
+                }
+              }
+              else {
+                msg ("You can't make out the finer text in this dim light.")
+              }
+            </read>
+          </object>
+          <object name="eighth chapter">
+            <inherit name="editor_object" />
+            <scenery />
+            <visible />
+            <drop type="boolean">false</drop>
+            <not_all />
+            <alias>eighth chapter</alias>
+            <look type="script">
+              msg ("This chapter starts with \"Flowing fluids behave different from static fluids ...\" You don't want to waste time on reading it.")
+              set (books, "has_read", 0)
+            </look>
+            <read type="script">
+              if (IsSwitchedOn(lamp)) {
+                msg ("This chapter is boring. You don't want to read it.")
+                set (books, "has_read", 0)
+              }
+              else {
+                msg ("You can't make out the finer text in this dim light.")
+              }
+            </read>
+          </object>
+          <object name="ninth chapter">
             <inherit name="editor_object" />
             <scenery />
             <visible />
             <not_all />
             <drop type="boolean">false</drop>
-            <alias>first chapter</alias>
+            <alias>ninth chapter</alias>
             <look type="script">
-              msg ("This chapter starts with \"Newtonian physics, also called Newtonian or classical mechanics, ...\" You don't want to waste time on reading it.")
+              msg ("This chapter starts with \"Oscillation refers to the repeated back and forth movement of ...\" You don't want to waste time on reading it.")
               set (books, "has_read", 0)
             </look>
             <read type="script">
-              msg ("This chapter is boring. You don't want to read it.")
-              set (books, "has_read", 0)
+              if (IsSwitchedOn(lamp)) {
+                msg ("This chapter is boring. You don't want to read it.")
+                set (books, "has_read", 0)
+              }
+              else {
+                msg ("You can't make out the finer text in this dim light.")
+              }
             </read>
           </object>
         </object>
@@ -532,6 +610,8 @@
           <usedefaultprefix type="boolean">false</usedefaultprefix>
           <look>A solid pair of pliers, with red rubber handles.</look>
           <takemsg>You grab them.</takemsg>
+          <dropmsg>Inadvisably, you drop the sharp pliers. Look out below!</dropmsg>
+          <use />
           <selfuseanything type="script">
             msg ("Cutting that won't help.")
           </selfuseanything>
@@ -591,24 +671,31 @@
           <attr name="feature_usegive" type="boolean">false</attr>
           <takemsg>You fold up the letter and tuck it away.</takemsg>
           <attr name="player_read" type="boolean">false</attr>
+          <drop type="boolean">false</drop>
+          <dropmsg>You don't think that's such a good idea. It might have clues for getting out of here.</dropmsg>
           <look type="script"><![CDATA[
             if (IsSwitchedOn(lamp)) {
-              TextFX_Typewriter ("\"Catherine,", 50)
-              SetTimeout (1) {
-                TextFX_Typewriter ("Your performance in my class was abysmal. You and your partner completely neglected to work together on the final project. Now both of you are stuck in here until you can learn some cooperation.", 25)
-                SetTimeout (5) {
-                  TextFX_Typewriter ("Severely Disappointed,", 50)
-                  SetTimeout (1) {
-                    TextFX_Typewriter ("Professor Von Wienerberg\"", 50)
-                    SetTimeout (2) {
-                      wait {
-                        msg ("<br/>There's a {object:sticky note} with three complicated-looking homework problems attached on the back.<br/><br/>Well. Turns out your teacher's insane. No time to worry about that now, though. Right now, you need to focus on getting out of here, and apparently rescuing your project partner...what was her name again?")
-                        set (letter, "player_read", true)
-                        AddToInventory (sticky note)
+              if (letter.player_read = false) {
+                TextFX_Typewriter ("\"Catherine,", 50)
+                SetTimeout (1) {
+                  TextFX_Typewriter ("Your performance in my class was abysmal. You and your partner completely neglected to work together on the final project. Now both of you are stuck in here until you can learn some cooperation.", 25)
+                  SetTimeout (5) {
+                    TextFX_Typewriter ("Severely Disappointed,", 50)
+                    SetTimeout (1) {
+                      TextFX_Typewriter ("Professor Von Wienerberg\"", 50)
+                      SetTimeout (2) {
+                        wait {
+                          msg ("<br/>There's a {object:sticky note} with three complicated-looking homework problems attached on the back.<br/><br/>Well. Turns out your teacher's insane. No time to worry about that now, though. Right now, you need to focus on getting out of here, and apparently rescuing your project partner...what was her name again?")
+                          set (letter, "player_read", true)
+                          AddToInventory (sticky note)
+                        }
                       }
                     }
                   }
                 }
+              }
+              else {
+                msg ("\"Catherine,<br/>Your performance in my class was abysmal. You and your partner completely neglected to work together on the final project. Now both of you are stuck in here until you can learn some cooperation.<br/>Severely Disappointed,<br/>Professor Von Wienerberg\"<br/><br/>There's a {object:sticky note} with three complicated-looking homework problems attached on the back.")
               }
             }
             else {
@@ -619,13 +706,16 @@
             <inherit name="editor_object" />
             <alias>sticky note</alias>
             <take type="boolean">false</take>
-            <look type="script">
+            <drop type="boolean">false</drop>
+            <not_all />
+            <look type="script"><![CDATA[
               msg ("There are three complicated questions on it.")
               msg ("The first one is about Work and Energy;")
               msg ("The second one is about Electricity;")
               msg ("The third one is about Wave Equation.")
               msg ("at the end, there's a handwriting said \"solve them {b:in order}!\"")
-            </look>
+              msg ("<br/>You don't know how to solve any of these. You'd have to consult an outside source, but that's somewhat difficult right now.")
+            ]]></look>
             <read type="script">
               msg ("There are three complicated questions on it.")
               msg ("The first one is about Work and Energy;")
@@ -661,10 +751,11 @@
         <not_all />
         <onswitchon type="script">
           MakeExitVisible (basement_door)
-          set (basement_door, "scenery", false)
+          MakeObjectVisible (door)
         </onswitchon>
         <onswitchoff type="script">
           MakeExitInvisible (basement_door)
+          MakeObjectInvisible (door)
         </onswitchoff>
       </object>
       <exit alias="southeast" to="basement_center">
@@ -764,7 +855,7 @@
             msg ("You realize that you do not actually hate her. You did not like her simply because she was your lab partner and you did not enjoy lab experiments and reports. You begin to think that maybe you can be friend with her after all this.")
           }
           else {
-            msg ("Your neglected project partner, finally free.")
+            msg ("An unremarkable door.")
           }
         }
       ]]></look>
@@ -782,7 +873,7 @@
       <unlock type="script"><![CDATA[
         if (Sharon.alias = "Sharon's door") {
           if (Sharon.has_been_annoying = true) {
-            msg ("You feel your frustration with mounting and mounting. Stupid Professor Von Wienerberg locking you in this stupid church with these stupid puzzles! In a fit of rage, you throw yourself against Sharon's door and rip it clean off the hinges.<br/><br/>Wow. Property damage aside, that was spectacular.<br/><br/>Sharon gingerly steps out.")
+            msg ("Finally, you're able to help Sharon figure out the puzzles, and she unlocks the storage room door.<br/><br/>Sharon gingerly steps out.")
             set (Sharon, "alias", "Sharon")
             set (Sharon, "displayverbs", Split("Look at;Speak to", ";"))
           }
@@ -791,12 +882,20 @@
           }
         }
         else {
-          msg ("You can't do that.")
+          msg ("You can't unlock that.")
         }
       ]]></unlock>
     </object>
     <exit alias="north" to="front of the chapel">
       <inherit name="northdirection" />
+      <runscript />
+      <script type="script">
+        MoveObject (player, front of the chapel)
+        if (Sharon.alias = "Sharon") {
+          MoveObject (Sharon, front of the chapel)
+          msg ("Sharon follows you.")
+        }
+      </script>
     </exit>
   </object>
   <object name="front of the chapel">
@@ -817,13 +916,14 @@
         <value>Take</value>
         <value>Use</value>
       </displayverbs>
+      <look>Large windows high on the wall above the lectern. Maybe you could use them to escape?</look>
       <use type="script"><![CDATA[
-        if (not ListContains(ScopeVisible(), Sharon)) {
-          msg ("You try to exit the chapel, but the windows are too high to reach. You're going to need to find a way to get up there.<br/><br/>You hear shouting coming from the {object:Sharon} on the west side of the church.")
+        if (Sharon.visible = false) {
+          msg ("You try to exit the chapel, but the windows are too high to reach. You're going to need to find a way to get up there.<br/><br/>You hear shouting coming from the {object:Sharon} back the way you came from.")
           MakeObjectVisible (Sharon)
         }
         else if (Sharon.alias = "Sharon") {
-          msg ("With Sharon's help, you're able to climb up out the window, and you go around front to let her out the door. With professor's book in your hand, <br/><br/>Congratulations! You've beat Escape the Church!")
+          msg ("With Sharon's help, you're able to climb up out the window, and you go around front to let her out the door. With professor's textbook in your hand, you finally think that the material of this course may actually help a lot in real life. You decide that you will study the book with Sharon again, complete the final project with her and request a makeup test from your porfessor.<br/><br/>Congratulations! You've beat Escape the Church!")
           finish
         }
         else {
@@ -849,11 +949,24 @@
     <exit alias="south" to="chapel">
       <inherit name="southdirection" />
       <prefix type="string"></prefix>
+      <runscript />
+      <script type="script">
+        MoveObject (player, chapel)
+        if (Sharon.alias = "Sharon") {
+          MoveObject (Sharon, chapel)
+          msg ("Sharon follows you.")
+        }
+      </script>
     </exit>
   </object>
   <verb>
     <property>cut</property>
     <pattern>cut</pattern>
     <defaultexpression>"You can't cut " + object.article + "."</defaultexpression>
+  </verb>
+  <verb>
+    <property>unlock</property>
+    <pattern>unlock</pattern>
+    <defaultexpression>"You can't unlock " + object.article + "."</defaultexpression>
   </verb>
 </asl>
