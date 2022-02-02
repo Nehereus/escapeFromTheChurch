@@ -813,7 +813,7 @@
         <value>Use</value>
       </displayverbs>
       <use type="script"><![CDATA[
-        if (not ListContains(ScopeVisible(), Sharon)) {
+        if (Sharon.visible = false) {
           msg ("You try to exit the chapel, but the windows are too high to reach. You're going to need to find a way to get up there.<br/><br/>You hear shouting coming from the {object:Sharon} on the west side of the church.")
           MakeObjectVisible (Sharon)
         }
