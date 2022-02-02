@@ -313,17 +313,22 @@
           <alias>textbook</alias>
           <scenery type="boolean">false</scenery>
           <look type="script">
-            msg ("Index")
-            msg ("{object:first chapter:First Chapter}: Newtonian Physics")
-            msg ("{object:second chapter:Second Chapter}: Electricity")
-            msg ("{object:third chapter:Third Chapter}: Momentum and Collisions")
-            msg ("{object:fourth chapter:Fourth Chapter}: Work and Energy")
-            msg ("{object:fifth chapter:Fifth Chapter}: Torque and Rotation")
-            msg ("{object:sixth chapter:Sixth Chapter}: Angular Momentum")
-            msg ("{object:seventh chapter:Seventh Chapter}: the Wave Equation")
-            msg ("{object:eighth chapter:Eighth Chapter}: Fluids")
-            msg ("{object:ninth chapter:Ninth Chapter}: Oscillations")
-            msg ("hint: click the hyperlink to read")
+            if (IsSwitchedOn(lamp)) {
+              msg ("Index")
+              msg ("{object:first chapter:First Chapter}: Newtonian Physics")
+              msg ("{object:second chapter:Second Chapter}: Electricity")
+              msg ("{object:third chapter:Third Chapter}: Momentum and Collisions")
+              msg ("{object:fourth chapter:Fourth Chapter}: Work and Energy")
+              msg ("{object:fifth chapter:Fifth Chapter}: Torque and Rotation")
+              msg ("{object:sixth chapter:Sixth Chapter}: Angular Momentum")
+              msg ("{object:seventh chapter:Seventh Chapter}: the Wave Equation")
+              msg ("{object:eighth chapter:Eighth Chapter}: Fluids")
+              msg ("{object:ninth chapter:Ninth Chapter}: Oscillations")
+              msg ("hint: click the hyperlink to read")
+            }
+            else {
+              msg ("The light is too dim for you to make out what the book says.")
+            }
           </look>
           <selfuseanything type="script">
             msg ("Using books won't help here.")
@@ -492,7 +497,7 @@
             <visible />
             <alias>sixth chapter</alias>
             <look type="script">
-              msg ("This chapter starts with \"angular momentum is the rotational analog of linear momentum ...\"  You don't want to waste time on reading it.")
+              msg ("This chapter starts with \"Angular momentum is the rotational analog of linear momentum ...\"  You don't want to waste time on reading it.")
               set (books, "has_read", 0)
             </look>
             <read type="script">
