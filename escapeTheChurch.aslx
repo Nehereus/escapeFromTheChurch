@@ -305,27 +305,26 @@
           <usedefaultprefix />
           <prefix>a</prefix>
           <take />
-          <look type="script">
-            if (IsSwitchedOn(lamp)) {
-              msg ("Index")
-              msg ("{object:first chapter:First Chapter}: Newtonian Physics")
-              msg ("{object:second chapter:Second Chapter}: Electricity")
-              msg ("{object:third chapter:Third Chapter}: Momentum and Collisions")
-              msg ("{object:fourth chapter:Fourth Chapter}: Work and Energy")
-              msg ("{object:fifth chapter:Fifth Chapter}: Torque and Rotation")
-              msg ("{object:sixth chapter:Sixth Chapter}: Angular Momentum")
-              msg ("{object:seventh chapter:Seventh Chapter}: the Wave Equation")
-              msg ("{object:eighth chapter:Eighth Chapter}: Fluids")
-              msg ("{object:ninth chapter:Ninth Chapter}: Oscillations")
-              msg ("hint: click the hyperlink to read")
-            }
-            else {
-              msg ("The light is too dim for you to make out what the book says.")
-            }
-          </look>
           <feature_usegive />
           <attr name="has_read" type="int">0</attr>
           <dropmsg>They scatter on the floor with a dull thud.</dropmsg>
+          <feature_container />
+          <hidechildren />
+          <alias>textbook</alias>
+          <scenery type="boolean">false</scenery>
+          <look type="script">
+            msg ("Index")
+            msg ("{object:first chapter:First Chapter}: Newtonian Physics")
+            msg ("{object:second chapter:Second Chapter}: Electricity")
+            msg ("{object:third chapter:Third Chapter}: Momentum and Collisions")
+            msg ("{object:fourth chapter:Fourth Chapter}: Work and Energy")
+            msg ("{object:fifth chapter:Fifth Chapter}: Torque and Rotation")
+            msg ("{object:sixth chapter:Sixth Chapter}: Angular Momentum")
+            msg ("{object:seventh chapter:Seventh Chapter}: the Wave Equation")
+            msg ("{object:eighth chapter:Eighth Chapter}: Fluids")
+            msg ("{object:ninth chapter:Ninth Chapter}: Oscillations")
+            msg ("hint: click the hyperlink to read")
+          </look>
           <selfuseanything type="script">
             msg ("Using books won't help here.")
           </selfuseanything>
@@ -341,41 +340,38 @@
               }
             </item>
           </selfuseon>
-          <feature_container />
-          <hidechildren />
-          <alias>textbook</alias>
-          <scenery type="boolean">false</scenery>
           <object name="third chapter">
             <inherit name="editor_object" />
-            <scenery type="boolean">false</scenery>
+            <scenery />
             <visible />
-            <look type="script">
-              msg ("This chapter is boring. You don't want to read it.")
-              set (books, "has_read", 0)
-            </look>
             <drop type="boolean">false</drop>
             <not_all />
+            <alias>third chapter</alias>
+            <look type="script">
+              msg ("This chapter starts with\"Momentum is a measurement of mass in motion ...\" You don't want to waste time on reading it.")
+              set (books, "has_read", 0)
+            </look>
             <read type="script">
               msg ("This chapter is boring. You don't want to read it.")
               set (books, "has_read", 0)
             </read>
-            <alias>third chapter</alias>
           </object>
           <object name="fourth chapter">
             <inherit name="editor_object" />
-            <scenery type="boolean">false</scenery>
+            <scenery />
             <visible />
+            <not_all />
+            <drop type="boolean">false</drop>
+            <alias>fourth chapter</alias>
             <look type="script">
               if (letter.player_read = true) {
                 msg ("You solve the first question by reading the chapter")
                 set (books, "has_read", 1)
               }
               else {
-                msg ("This chapter is boring. You don't want to waste time to read it.")
+                msg ("This chapter starts with \"The concepts of work and energy are closely tied to the concept of force because ...\" You don't want to waste time on reading it.")
               }
             </look>
-            <not_all />
-            <drop type="boolean">false</drop>
             <read type="script">
               if (letter.player_read = true) {
                 msg ("You solve the first question by reading the chapter")
@@ -385,40 +381,40 @@
                 msg ("This chapter is boring. You don't want to waste time to read it.")
               }
             </read>
-            <alias>fourth chapter</alias>
           </object>
           <object name="fifth chapter">
             <inherit name="editor_object" />
-            <scenery type="boolean">false</scenery>
+            <scenery />
             <visible />
-            <look type="script">
-              msg ("This chapter is boring. You don't want to read it.")
-              set (books, "has_read", 0)
-            </look>
             <drop type="boolean">false</drop>
             <not_all />
+            <alias>fifth chapter</alias>
+            <look type="script">
+              msg ("This chapter starts with \"Torque is a measure of how much a force acting on an object causes that object to rotate ...\" You don't want to waste time on reading it.")
+              set (books, "has_read", 0)
+            </look>
             <read type="script">
               msg ("This chapter is boring. You don't want to read it.")
               set (books, "has_read", 0)
             </read>
-            <alias>fifth chapter</alias>
           </object>
           <object name="seventh chapter">
             <inherit name="editor_object" />
-            <scenery type="boolean">false</scenery>
+            <scenery />
             <visible />
+            <drop type="boolean">false</drop>
+            <not_all />
+            <alias>seventh chapter</alias>
             <look type="script">
               if (books.has_read = 2) {
                 msg ("When you just finish writing the answer for the third question. You heard somewhere a door opened.")
                 UnlockExit (basement_door)
               }
               else {
-                msg ("This chapter is boring. You don't want to waste time to read it.")
+                msg ("This chapter starts with \"The wave equation is a second-order linear partial differential equation for the ...\" You don't want to waste time on reading it.")
                 set (books, "has_read", 0)
               }
             </look>
-            <drop type="boolean">false</drop>
-            <not_all />
             <read type="script">
               if (books.has_read = 2) {
                 msg ("When you just finish writing the answer for the third question. You heard somewhere a door opened.")
@@ -429,56 +425,56 @@
                 set (books, "has_read", 0)
               }
             </read>
-            <alias>seventh chapter</alias>
           </object>
           <object name="eighth chapter">
             <inherit name="editor_object" />
-            <scenery type="boolean">false</scenery>
+            <scenery />
             <visible />
-            <look type="script">
-              msg ("This chapter is boring. You don't want to read it.")
-              set (books, "has_read", 0)
-            </look>
             <drop type="boolean">false</drop>
             <not_all />
+            <alias>eighth chapter</alias>
+            <look type="script">
+              msg ("This chapter starts with \"Flowing fluids behave different from static fluids ...\" You don't want to waste time on reading it.")
+              set (books, "has_read", 0)
+            </look>
             <read type="script">
               msg ("This chapter is boring. You don't want to read it.")
               set (books, "has_read", 0)
             </read>
-            <alias>eighth chapter</alias>
           </object>
           <object name="ninth chapter">
             <inherit name="editor_object" />
-            <scenery type="boolean">false</scenery>
+            <scenery />
             <visible />
-            <look type="script">
-              msg ("This chapter is boring. You don't want to read it.")
-              set (books, "has_read", 0)
-            </look>
             <not_all />
             <drop type="boolean">false</drop>
+            <alias>ninth chapter</alias>
+            <look type="script">
+              msg ("This chapter starts with \"Oscillation refers to the repeated back and forth movement of ...\" You don't want to waste time on reading it.")
+              set (books, "has_read", 0)
+            </look>
             <read type="script">
               msg ("This chapter is boring. You don't want to read it.")
               set (books, "has_read", 0)
             </read>
-            <alias>ninth chapter</alias>
           </object>
           <object name="second chapter">
             <inherit name="editor_object" />
-            <scenery type="boolean">false</scenery>
+            <scenery />
             <visible />
+            <not_all />
+            <drop type="boolean">false</drop>
+            <alias>second chapter</alias>
             <look type="script">
               if (books.has_read = 1) {
                 msg ("You solve the second question by reading this chapter")
                 set (books, "has_read", 2)
               }
               else {
-                msg ("This chapter is boring. You don't want to waste time to read it.")
+                msg ("This chapter starts with \"Electricity is the set of physical phenomena associated with the presence and motion of matter ...\" You don't want to waste time on reading it.")
                 set (books, "has_read", 0)
               }
             </look>
-            <not_all />
-            <drop type="boolean">false</drop>
             <read type="script">
               if (books.has_read = 1) {
                 msg ("You solve the second question by reading this chapter")
@@ -489,37 +485,36 @@
                 set (books, "has_read", 0)
               }
             </read>
-            <alias>second chapter</alias>
           </object>
           <object name="sixth chapter">
             <inherit name="editor_object" />
-            <scenery type="boolean">false</scenery>
+            <scenery />
             <visible />
+            <alias>sixth chapter</alias>
             <look type="script">
-              msg ("This chapter is boring. You don't want to read it.")
+              msg ("This chapter starts with \"angular momentum is the rotational analog of linear momentum ...\"  You don't want to waste time on reading it.")
               set (books, "has_read", 0)
             </look>
             <read type="script">
               msg ("This chapter is boring. You don't want to read it.")
               set (books, "has_read", 0)
             </read>
-            <alias>sixth chapter</alias>
           </object>
           <object name="first chapter">
             <inherit name="editor_object" />
-            <scenery type="boolean">false</scenery>
+            <scenery />
             <visible />
-            <look type="script">
-              msg ("This chapter is boring. You don't want to read it.")
-              set (books, "has_read", 0)
-            </look>
             <not_all />
             <drop type="boolean">false</drop>
+            <alias>first chapter</alias>
+            <look type="script">
+              msg ("This chapter starts with \"Newtonian physics, also called Newtonian or classical mechanics, ...\" You don't want to waste time on reading it.")
+              set (books, "has_read", 0)
+            </look>
             <read type="script">
               msg ("This chapter is boring. You don't want to read it.")
               set (books, "has_read", 0)
             </read>
-            <alias>first chapter</alias>
           </object>
         </object>
         <object name="pliers">
@@ -618,6 +613,7 @@
           <object name="sticky note">
             <inherit name="editor_object" />
             <alias>sticky note</alias>
+            <take type="boolean">false</take>
             <look type="script">
               msg ("There are three complicated questions on it.")
               msg ("The first one is about Work and Energy;")
@@ -632,7 +628,6 @@
               msg ("The third one is about quantum physics.")
               msg ("at the end, there's a handwriting said \"solve them {b:in order}!\"")
             </read>
-            <take type="boolean">false</take>
           </object>
         </object>
       </object>
@@ -731,11 +726,11 @@
     <exit alias="the basement" to="basement_center">
       <inherit name="downdirection" />
       <runscript type="boolean">false</runscript>
+      <prefix>to</prefix>
       <script type="script">
         MoveObject (player, basement_center)
         DisableTimer (sharon_timer)
       </script>
-      <prefix>to</prefix>
     </exit>
     <object name="Sharon">
       <inherit name="editor_object" />
