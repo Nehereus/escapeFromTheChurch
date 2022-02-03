@@ -423,6 +423,7 @@
             <not_all />
             <drop type="boolean">false</drop>
             <alias>second chapter</alias>
+            <feature_usegive />
             <look type="script">
               if (IsSwitchedOn(lamp)) {
                 if (books.has_read = 1) {
@@ -453,7 +454,6 @@
                 msg ("You can't make out the finer text in this dim light.")
               }
             </read>
-            <feature_usegive />
             <selfuseon type="scriptdictionary">
               <item key="Sharon"><![CDATA[
                 if (Sharon.alias="Sharon's door") {
@@ -1032,10 +1032,5 @@
     <property>cut</property>
     <pattern>cut</pattern>
     <defaultexpression>"You can't cut " + object.article + "."</defaultexpression>
-  </verb>
-  <verb>
-    <property>unlock</property>
-    <pattern>unlock</pattern>
-    <defaultexpression>"You can't unlock " + object.article + "."</defaultexpression>
   </verb>
 </asl>
