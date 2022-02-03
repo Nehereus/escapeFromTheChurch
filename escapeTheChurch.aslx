@@ -27,6 +27,7 @@
     <customlocationtextcolour>Navy</customlocationtextcolour>
     <statusandcompassattop type="boolean">false</statusandcompassattop>
     <borderlesscursor />
+    <author>Kevin Zhou, Bryan Jia, Nick Du, Luck Zhang</author>
     <start type="script"><![CDATA[
       msg ("Welcome to Escape the Church! If you get stuck, type HELP for some guidance. Also, keep in mind that not everything in this game is necessarily accessible by hyperlink. The text input isn't entirely decorative, you know.<br/><br/>Have fun!<br/>")
       wait {
@@ -35,7 +36,6 @@
         }
       }
     ]]></start>
-    <author>Kevin Zhou, Bryan Jia, Nick Du, Luck Zhang</author>
   </game>
   <object name="basement">
     <inherit name="editor_room" />
@@ -398,8 +398,13 @@
             <drop type="boolean">false</drop>
             <alias>first chapter</alias>
             <look type="script">
-              msg ("This chapter starts with \"Newtonian physics, also called Newtonian or classical mechanics, ...\" ")
-              set (books, "has_read", 0)
+              if (IsSwitchedOn(lamp)) {
+                msg ("This chapter starts with \"Newtonian physics, also called Newtonian or classical mechanics, ...\" ")
+                set (books, "has_read", 0)
+              }
+              else {
+                msg ("You can't make out the finer text in this dim light.")
+              }
             </look>
             <read type="script">
               if (IsSwitchedOn(lamp)) {
@@ -419,13 +424,18 @@
             <drop type="boolean">false</drop>
             <alias>second chapter</alias>
             <look type="script">
-              if (books.has_read = 1) {
-                msg ("You solve the second question by reading this chapter")
-                set (books, "has_read", 2)
+              if (IsSwitchedOn(lamp)) {
+                if (books.has_read = 1) {
+                  msg ("You solve the second question by reading this chapter")
+                  set (books, "has_read", 2)
+                }
+                else {
+                  msg ("This chapter starts with \"Electricity is the set of physical phenomena associated with the presence and motion of matter ...\" ")
+                  set (books, "has_read", 0)
+                }
               }
               else {
-                msg ("This chapter starts with \"Electricity is the set of physical phenomena associated with the presence and motion of matter ...\" ")
-                set (books, "has_read", 0)
+                msg ("You can't make out the finer text in this dim light.")
               }
             </look>
             <read type="script">
@@ -443,6 +453,19 @@
                 msg ("You can't make out the finer text in this dim light.")
               }
             </read>
+            <feature_usegive />
+            <selfuseon type="scriptdictionary">
+              <item key="Sharon"><![CDATA[
+                if (Sharon.alias="Sharon's door") {
+                  msg ("You shared some useful knowledge in that chapter with Sharon. Talking over the door, you begin to realize that you don't actually hate her. You did not like her simply because she is your lab partner and you did not enjoy lab experiments and reports. <br/><br/>After working together, you think you can unlock {object:Sharon}.")
+                  set (Sharon, "has_been_annoying", true)
+                  set (Sharon, "displayverbs", ListCombine(Sharon.displayverbs, Split("Unlock")))
+                }
+                else {
+                  msg ("Using books won't help here.")
+                }
+              ]]></item>
+            </selfuseon>
           </object>
           <object name="third chapter">
             <inherit name="editor_object" />
@@ -452,8 +475,13 @@
             <not_all />
             <alias>third chapter</alias>
             <look type="script">
-              msg ("This chapter starts with\"Momentum is a measurement of mass in motion ...\" ")
-              set (books, "has_read", 0)
+              if (IsSwitchedOn(lamp)) {
+                msg ("This chapter starts with\"Momentum is a measurement of mass in motion ...\" ")
+                set (books, "has_read", 0)
+              }
+              else {
+                msg ("You can't make out the finer text in this dim light.")
+              }
             </look>
             <read type="script">
               if (IsSwitchedOn(lamp)) {
@@ -473,12 +501,17 @@
             <drop type="boolean">false</drop>
             <alias>fourth chapter</alias>
             <look type="script">
-              if (letter.player_read = true) {
-                msg ("You solve the first question by reading the chapter")
-                set (books, "has_read", 1)
+              if (IsSwitchedOn(lamp)) {
+                if (letter.player_read = true) {
+                  msg ("You solve the first question by reading the chapter")
+                  set (books, "has_read", 1)
+                }
+                else {
+                  msg ("This chapter starts with \"The concepts of work and energy are closely tied to the concept of force because ...\" ")
+                }
               }
               else {
-                msg ("This chapter starts with \"The concepts of work and energy are closely tied to the concept of force because ...\" ")
+                msg ("You can't make out the finer text in this dim light.")
               }
             </look>
             <read type="script">
@@ -504,8 +537,13 @@
             <not_all />
             <alias>fifth chapter</alias>
             <look type="script">
-              msg ("This chapter starts with \"Torque is a measure of how much a force acting on an object causes that object to rotate ...\" ")
-              set (books, "has_read", 0)
+              if (IsSwitchedOn(lamp)) {
+                msg ("This chapter starts with \"Torque is a measure of how much a force acting on an object causes that object to rotate ...\" ")
+                set (books, "has_read", 0)
+              }
+              else {
+                msg ("You can't make out the finer text in this dim light.")
+              }
             </look>
             <read type="script">
               if (IsSwitchedOn(lamp)) {
@@ -523,8 +561,13 @@
             <visible />
             <alias>sixth chapter</alias>
             <look type="script">
-              msg ("This chapter starts with \"angular momentum is the rotational analog of linear momentum ...\"  ")
-              set (books, "has_read", 0)
+              if (IsSwitchedOn(lamp)) {
+                msg ("This chapter starts with \"angular momentum is the rotational analog of linear momentum ...\" ")
+                set (books, "has_read", 0)
+              }
+              else {
+                msg ("You can't make out the finer text in this dim light.")
+              }
             </look>
             <read type="script">
               if (IsSwitchedOn(lamp)) {
@@ -544,7 +587,10 @@
             <not_all />
             <alias>seventh chapter</alias>
             <look type="script">
-              if (books.has_read = 2) {
+              if (not IsSwitchedOn(lamp)) {
+                msg ("You can't make out the finer text in this dim light.")
+              }
+              else if (books.has_read = 2) {
                 msg ("After you solved the last question, you go to the center of the basement and enter the answer you get to the keypad of lock, the door is opened. ")
                 UnlockExit (basement_door)
                 MoveObject (player, basement_center)
@@ -577,8 +623,13 @@
             <not_all />
             <alias>eighth chapter</alias>
             <look type="script">
-              msg ("This chapter starts with \"Flowing fluids behave different from static fluids ...\" ")
-              set (books, "has_read", 0)
+              if (IsSwitchedOn(lamp)) {
+                msg ("This chapter starts with \"Flowing fluids behave different from static fluids ...\" ")
+                set (books, "has_read", 0)
+              }
+              else {
+                msg ("You can't make out the finer text in this dim light.")
+              }
             </look>
             <read type="script">
               if (IsSwitchedOn(lamp)) {
@@ -598,8 +649,13 @@
             <drop type="boolean">false</drop>
             <alias>ninth chapter</alias>
             <look type="script">
-              msg ("This chapter starts with \"Oscillation refers to the repeated back and forth movement of ...\" ")
-              set (books, "has_read", 0)
+              if (IsSwitchedOn(lamp)) {
+                msg ("This chapter starts with \"Oscillation refers to the repeated back and forth movement of ...\" ")
+                set (books, "has_read", 0)
+              }
+              else {
+                msg ("You can't make out the finer text in this dim light.")
+              }
             </look>
             <read type="script">
               if (IsSwitchedOn(lamp)) {
