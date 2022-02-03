@@ -4,7 +4,7 @@
   <include ref="Core.aslx" />
   <game name="Escape the Church">
     <gameid>b71b5964-07fe-488a-83e1-76da64dff263</gameid>
-    <version>2.0</version>
+    <version>2.1</version>
     <firstpublished>2022</firstpublished>
     <defaultforeground>Black</defaultforeground>
     <defaultbackground>PowderBlue</defaultbackground>
