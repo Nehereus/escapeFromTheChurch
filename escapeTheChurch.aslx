@@ -731,7 +731,7 @@
               msg ("There are three complicated questions on it.")
               msg ("The first one is about Work and Energy;")
               msg ("The second one is about electricity;")
-              msg ("The third one is about quantum physics.")
+              msg ("The third one is about the Wave Equation.")
               msg ("at the end, there's a handwriting said \"solve them {b:in order}!\"")
             </read>
           </object>
