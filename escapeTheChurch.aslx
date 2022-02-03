@@ -361,6 +361,7 @@
           </selfuseanything>
           <read type="script">
             if (IsSwitchedOn(lamp)) {
+              set (books, "hidechildren", false)
               msg ("Table of Contents")
               msg ("{object:first chapter:First Chapter}: Newtonian Physics")
               msg ("{object:second chapter:Second Chapter}: Electricity")
@@ -731,7 +732,7 @@
               msg ("There are three complicated questions on it.")
               msg ("The first one is about Work and Energy;")
               msg ("The second one is about electricity;")
-              msg ("The third one is about quantum physics.")
+              msg ("The third one is about the Wave Equation.")
               msg ("at the end, there's a handwriting said \"solve them {b:in order}!\"")
             </read>
           </object>
