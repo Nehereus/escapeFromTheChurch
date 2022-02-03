@@ -103,7 +103,7 @@
         <runscript />
         <script type="script">
           firsttime {
-            msg ("You punch in the code to the door, and it swings open.")
+            msg ("You go upstairs.")
             MoveObject (player, chapel)
           }
           otherwise {
@@ -231,7 +231,7 @@
         <attr name="wire_cut" type="boolean">false</attr>
         <not_all />
         <look type="script">
-          if (not ListContains(ScopeVisible(), wire)) {
+          if (Contains (television,wire)) {
             msg ("A nice-looking plasma tv, but the screen is cracked. You can see an exposed {object:wire} in the back.")
             MakeObjectVisible (wire)
           }
@@ -243,9 +243,18 @@
         </onswitchon>
         <onswitchoff type="script">
         </onswitchoff>
+        <attr name="feature_usegive" type="boolean">false</attr>
+        <attr name="feature_container" type="boolean">false</attr>
         <object name="wire">
           <inherit name="editor_object" />
-          <look>There is an exposed wire sticking out the back of the TV.</look>
+          <look type="script">
+            if (Contains (television,wire)) {
+              msg ("There is an exposed wire sticking out the back of the TV.")
+            }
+            else {
+              msg ("A wire cut form the old tv.")
+            }
+          </look>
           <scenery type="boolean">false</scenery>
           <feature_usegive />
           <take type="boolean">false</take>
@@ -342,7 +351,9 @@
           <hidechildren />
           <alias>textbook</alias>
           <scenery type="boolean">false</scenery>
-          <look>A physics textbook. Might be good reading in your situation.</look>
+          <look type="script">
+            msg ("A textbook of ECER 290. A lot of marks and side notes on the pages, Juding from the handwrting, it's probably Professor Wienerberg's textbook. You only read a few pages of the textbook of this class before.")
+          </look>
           <use />
           <selfuseanything type="script">
             msg ("Using books won't help here.")
@@ -360,7 +371,6 @@
               msg ("{object:eighth chapter:Eighth Chapter}: Fluids")
               msg ("{object:ninth chapter:Ninth Chapter}: Oscillations")
               msg ("note: click the hyperlink to read")
-              set (books, "hidechildren", false)
             }
             else {
               msg ("You can't make out the finer text in this dim light.")
@@ -369,7 +379,7 @@
           <selfuseon type="scriptdictionary">
             <item key="Sharon"><![CDATA[
               if (Sharon.alias="Sharon's door") {
-                msg ("You read the book, trying to find some useful knowledge and share it with Sharon. Talking over the door, you begin to realize that you don't actually hate her. You did not like her simply because she is your lab partner and you did not enjoy lab experiments and reports. <br/><br/>After working together, you think you can unlock {object:Sharon}.")
+                msg ("You shared some useful knowledge in that chapter with Sharon. Talking over the door, you begin to realize that you don't actually hate her. You did not like her simply because she is your lab partner and you did not enjoy lab experiments and reports. <br/><br/>After working together, you think you can unlock {object:Sharon}.")
                 set (Sharon, "has_been_annoying", true)
                 set (Sharon, "displayverbs", ListCombine(Sharon.displayverbs, Split("Unlock")))
               }
@@ -386,12 +396,12 @@
             <drop type="boolean">false</drop>
             <alias>first chapter</alias>
             <look type="script">
-              msg ("This chapter starts with \"Newtonian physics, also called Newtonian or classical mechanics, ...\" You don't want to waste time on reading it.")
+              msg ("This chapter starts with \"Newtonian physics, also called Newtonian or classical mechanics, ...\" ")
               set (books, "has_read", 0)
             </look>
             <read type="script">
               if (IsSwitchedOn(lamp)) {
-                msg ("This chapter starts with \"Newtonian physics, also called Newtonian or classical mechanics, ...\" You don't want to waste time on reading it.")
+                msg ("This chapter starts with \"Newtonian physics, also called Newtonian or classical mechanics, ...\" ")
                 set (books, "has_read", 0)
               }
               else {
@@ -412,7 +422,7 @@
                 set (books, "has_read", 2)
               }
               else {
-                msg ("This chapter starts with \"Electricity is the set of physical phenomena associated with the presence and motion of matter ...\" You don't want to waste time on reading it.")
+                msg ("This chapter starts with \"Electricity is the set of physical phenomena associated with the presence and motion of matter ...\" ")
                 set (books, "has_read", 0)
               }
             </look>
@@ -423,7 +433,7 @@
                   set (books, "has_read", 2)
                 }
                 else {
-                  msg ("This chapter starts with \"Electricity is the set of physical phenomena associated with the presence and motion of matter ...\" You don't want to waste time on reading it.")
+                  msg ("This chapter starts with \"Electricity is the set of physical phenomena associated with the presence and motion of matter ...\" ")
                   set (books, "has_read", 0)
                 }
               }
@@ -440,12 +450,12 @@
             <not_all />
             <alias>third chapter</alias>
             <look type="script">
-              msg ("This chapter starts with\"Momentum is a measurement of mass in motion ...\" You don't want to waste time on reading it.")
+              msg ("This chapter starts with\"Momentum is a measurement of mass in motion ...\" ")
               set (books, "has_read", 0)
             </look>
             <read type="script">
               if (IsSwitchedOn(lamp)) {
-                msg ("This chapter starts with\"Momentum is a measurement of mass in motion ...\" You don't want to waste time on reading it.")
+                msg ("This chapter starts with\"Momentum is a measurement of mass in motion ...\" ")
                 set (books, "has_read", 0)
               }
               else {
@@ -466,7 +476,7 @@
                 set (books, "has_read", 1)
               }
               else {
-                msg ("This chapter starts with \"The concepts of work and energy are closely tied to the concept of force because ...\" You don't want to waste time on reading it.")
+                msg ("This chapter starts with \"The concepts of work and energy are closely tied to the concept of force because ...\" ")
               }
             </look>
             <read type="script">
@@ -476,7 +486,7 @@
                   set (books, "has_read", 1)
                 }
                 else {
-                  msg ("This chapter starts with \"The concepts of work and energy are closely tied to the concept of force because ...\" You don't want to waste time on reading it.")
+                  msg ("This chapter starts with \"The concepts of work and energy are closely tied to the concept of force because ...\" ")
                 }
               }
               else {
@@ -492,12 +502,12 @@
             <not_all />
             <alias>fifth chapter</alias>
             <look type="script">
-              msg ("This chapter starts with \"Torque is a measure of how much a force acting on an object causes that object to rotate ...\" You don't want to waste time on reading it.")
+              msg ("This chapter starts with \"Torque is a measure of how much a force acting on an object causes that object to rotate ...\" ")
               set (books, "has_read", 0)
             </look>
             <read type="script">
               if (IsSwitchedOn(lamp)) {
-                msg ("This chapter starts with \"Torque is a measure of how much a force acting on an object causes that object to rotate ...\" You don't want to waste time on reading it.")
+                msg ("This chapter starts with \"Torque is a measure of how much a force acting on an object causes that object to rotate ...\" ")
                 set (books, "has_read", 0)
               }
               else {
@@ -511,12 +521,12 @@
             <visible />
             <alias>sixth chapter</alias>
             <look type="script">
-              msg ("This chapter starts with \"angular momentum is the rotational analog of linear momentum ...\"  You don't want to waste time on reading it.")
+              msg ("This chapter starts with \"angular momentum is the rotational analog of linear momentum ...\"  ")
               set (books, "has_read", 0)
             </look>
             <read type="script">
               if (IsSwitchedOn(lamp)) {
-                msg ("This chapter starts with \"angular momentum is the rotational analog of linear momentum ...\"  You don't want to waste time on reading it.")
+                msg ("This chapter starts with \"angular momentum is the rotational analog of linear momentum ...\" ")
                 set (books, "has_read", 0)
               }
               else {
@@ -533,23 +543,26 @@
             <alias>seventh chapter</alias>
             <look type="script">
               if (books.has_read = 2) {
-                msg ("after you solved the last question, you go to the center of the basement and enter the answer you get to the lock. You hear the door is opened from the outside.")
+                msg ("After you solved the last question, you go to the center of the basement and enter the answer you get to the keypad of lock, the door is opened. ")
                 UnlockExit (basement_door)
                 MoveObject (player, basement_center)
               }
               else {
-                msg ("This chapter starts with \"The wave equation is a second-order linear partial differential equation for the ...\" You don't want to waste time on reading it.")
+                msg ("This chapter starts with \"The wave equation is a second-order linear partial differential equation for the ...\" ")
                 set (books, "has_read", 0)
               }
             </look>
             <read type="script">
-              if (books.has_read = 2) {
-                msg ("after you solved the last question, you go to the center of the basement and enter the answer you get to the lock. You hear the door is opened from the outside.")
+              if (not IsSwitchedOn(lamp)) {
+                msg ("You can't make out the finer text in this dim light.")
+              }
+              else if (books.has_read = 2) {
+                msg ("After you solved the last question, you go to the center of the basement and enter the answer you get to the keypad of lock, the door is opened. ")
                 UnlockExit (basement_door)
                 MoveObject (player, basement_center)
               }
               else {
-                msg ("This chapter starts with \"The wave equation is a second-order linear partial differential equation for the ...\" You don't want to waste time on reading it.")
+                msg ("This chapter starts with \"The wave equation is a second-order linear partial differential equation for the ...\" ")
                 set (books, "has_read", 0)
               }
             </read>
@@ -562,12 +575,12 @@
             <not_all />
             <alias>eighth chapter</alias>
             <look type="script">
-              msg ("This chapter starts with \"Flowing fluids behave different from static fluids ...\" You don't want to waste time on reading it.")
+              msg ("This chapter starts with \"Flowing fluids behave different from static fluids ...\" ")
               set (books, "has_read", 0)
             </look>
             <read type="script">
               if (IsSwitchedOn(lamp)) {
-                msg ("This chapter starts with \"Flowing fluids behave different from static fluids ...\" You don't want to waste time on reading it.")
+                msg ("This chapter starts with \"Flowing fluids behave different from static fluids ...\" ")
                 set (books, "has_read", 0)
               }
               else {
@@ -583,12 +596,12 @@
             <drop type="boolean">false</drop>
             <alias>ninth chapter</alias>
             <look type="script">
-              msg ("This chapter starts with \"Oscillation refers to the repeated back and forth movement of ...\" You don't want to waste time on reading it.")
+              msg ("This chapter starts with \"Oscillation refers to the repeated back and forth movement of ...\" ")
               set (books, "has_read", 0)
             </look>
             <read type="script">
               if (IsSwitchedOn(lamp)) {
-                msg ("This chapter starts with \"Oscillation refers to the repeated back and forth movement of ...\" You don't want to waste time on reading it.")
+                msg ("This chapter starts with \"Oscillation refers to the repeated back and forth movement of ...\" ")
                 set (books, "has_read", 0)
               }
               else {
@@ -861,7 +874,8 @@
           msg ("It says nothing. The person behind it, however, is not so quiet. Probably worth a closer look.")
         }
         else if (Sharon.alias = "Sharon's door") {
-          msg ("\"Help me, Catherine! There's some kind of weird puzzle in here, but I have no idea how to solve it!\"")
+          msg ("\"Help me, Catherine! There's some kind of weird electrical circuit puzzle in here, I got some batteries and some wire, and I have to connect the voltmeter either in series or parallel correctly to give 3 different outputs, but I have no idea how to solve it!\" ")
+          msg ("You remember you just read the chapter of electricity in the basement, time to use the book to enlighten Sharon!")
         }
         else {
           msg ("\"Thank you so much for getting me out of there!\"")

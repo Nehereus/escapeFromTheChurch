@@ -6,3 +6,9 @@
 [0202/021132:WARNING:message_in_transit_queue.cc(18)] Destroying nonempty message queue
 [0202/030227:ERROR:renderer_main.cc(207)] Running without renderer sandbox
 [0202/030452:WARNING:message_in_transit_queue.cc(18)] Destroying nonempty message queue
+[0202/135551:ERROR:renderer_main.cc(207)] Running without renderer sandbox
+[0202/141719:ERROR:render_widget_host_view_aura.cc(1561)] NOT IMPLEMENTED
+[0202/141719:ERROR:render_widget_host_view_aura.cc(1561)] NOT IMPLEMENTED
+[0202/175702:WARNING:message_in_transit_queue.cc(18)] Destroying nonempty message queue
+[0202/175720:ERROR:renderer_main.cc(207)] Running without renderer sandbox
+[0202/191650:WARNING:message_in_transit_queue.cc(18)] Destroying nonempty message queue
