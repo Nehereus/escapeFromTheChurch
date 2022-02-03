@@ -230,6 +230,8 @@
         <switchoffmsg>It is already switched off. Also broken.</switchoffmsg>
         <attr name="wire_cut" type="boolean">false</attr>
         <not_all />
+        <attr name="feature_usegive" type="boolean">false</attr>
+        <attr name="feature_container" type="boolean">false</attr>
         <look type="script">
           if (Contains (television,wire)) {
             msg ("A nice-looking plasma tv, but the screen is cracked. You can see an exposed {object:wire} in the back.")
@@ -243,10 +245,15 @@
         </onswitchon>
         <onswitchoff type="script">
         </onswitchoff>
-        <attr name="feature_usegive" type="boolean">false</attr>
-        <attr name="feature_container" type="boolean">false</attr>
         <object name="wire">
           <inherit name="editor_object" />
+          <scenery type="boolean">false</scenery>
+          <feature_usegive />
+          <take type="boolean">false</take>
+          <not_all />
+          <takemsg>You try to pull the wire out of the TV, but it doesn't give.</takemsg>
+          <visible type="boolean">false</visible>
+          <use />
           <look type="script">
             if (Contains (television,wire)) {
               msg ("There is an exposed wire sticking out the back of the TV.")
@@ -255,13 +262,6 @@
               msg ("A wire cut form the old tv.")
             }
           </look>
-          <scenery type="boolean">false</scenery>
-          <feature_usegive />
-          <take type="boolean">false</take>
-          <not_all />
-          <takemsg>You try to pull the wire out of the TV, but it doesn't give.</takemsg>
-          <visible type="boolean">false</visible>
-          <use />
           <ontake type="script">
           </ontake>
           <cut type="scriptdictionary">
@@ -351,15 +351,16 @@
           <hidechildren />
           <alias>textbook</alias>
           <scenery type="boolean">false</scenery>
+          <use />
           <look type="script">
             msg ("A textbook of ECER 290. A lot of marks and side notes on the pages, Juding from the handwrting, it's probably Professor Wienerberg's textbook. You only read a few pages of the textbook of this class before.")
           </look>
-          <use />
           <selfuseanything type="script">
             msg ("Using books won't help here.")
           </selfuseanything>
           <read type="script">
             if (IsSwitchedOn(lamp)) {
+              set (books, "hidechildren", false)
               msg ("Table of Contents")
               msg ("{object:first chapter:First Chapter}: Newtonian Physics")
               msg ("{object:second chapter:Second Chapter}: Electricity")
